@@ -1,0 +1,33 @@
+.filtercard-main-div {
+  width: 23.5rem;
+  height: 23.5rem;
+  position: relative;
+  margin: 10rem;
+}
+
+.filtercard-img {
+  border-radius: 3.6rem;
+}
+
+.filtercard-btn-div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100%;
+  width: 100%;
+  border-radius: 3.6rem;
+  background-color: #00000099;
+}
+
+.filtercard-btn {
+  border: none;
+  outline: none;
+  background: transparent;
+  height: 100%;
+  width: 100%;
+  font-size: 3rem;
+  line-height: 3.906rem;
+  text-align: center;
+  color: #fff;
+}

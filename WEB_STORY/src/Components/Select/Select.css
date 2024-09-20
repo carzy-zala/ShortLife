@@ -1,0 +1,11 @@
+.select-drop-down-box {
+  width: 24.5rem;
+  height: 3.5rem;
+  border: 0.1rem solid #000;
+
+}
+
+.option{
+    padding: 10rem;
+    color: red;
+}

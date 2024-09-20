@@ -1,0 +1,148 @@
+.showstorycard-main-div {
+  background-color: rgba(0, 0, 0, 0.9);
+  display: grid;
+  grid-template-columns: auto auto auto;
+  align-items: center;
+  justify-content: center;
+  gap: 15rem;
+  height: 100vh;
+}
+
+.showstorycard-arraow-btns {
+  outline: none;
+  border: none;
+  background-color: transparent;
+}
+
+.showstorycard-story-div {
+  width: 27rem;
+  height: 50rem;
+  position: relative;
+  box-shadow: 0 0.4rem 4rem 0 #d9d9d94d;
+  border-radius: 1.1rem;
+}
+
+.showstorycard-image {
+  height: 50rem;
+  width: 27rem;
+  border-radius: 1.1rem;
+}
+
+.showstorycard-header {
+  position: absolute;
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    #000000,
+    #000000,
+    rgba(0, 0, 0, 0.8),
+    rgba(0, 0, 0, 0.01)
+  );
+  width: 100%;
+  height: 14.2rem;
+  border-radius: 1.1rem 1.1rem 0 0;
+  padding: 2rem;
+}
+
+.showstorycard-loader-div {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10px, 1fr));
+  gap: 0.5rem;
+}
+
+.loader {
+  height: 0.4rem;
+  background: linear-gradient(#fff 0 0) 0/0% no-repeat #d9d9d980;
+}
+
+.loader-completed {
+  background-color: #fff;
+}
+
+.loader-transition {
+  animation: l1 5s none linear;
+}
+@keyframes l1 {
+  100% {
+    background-size: 100%;
+  }
+}
+
+.showstorycard-header-btns {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+  padding: 3rem 0;
+}
+
+.showstorycard-header-btn{
+  outline: none;
+  border: none;
+  background-color: transparent;
+}
+
+.showstorycard-bottom {
+  position: absolute;
+  bottom: 0;
+  padding: 2.5rem 2rem;
+  height: 20rem;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.01),
+    rgba(0, 0, 0, 0.8),
+    #000000,
+    #000000
+  );
+  border-radius: 0 0 1.1rem 1.1rem;
+  grid-template-rows: 1fr;
+  display: grid;
+  align-items: end;
+}
+
+.showstorycard-bottom-copy-link {
+  color: red;
+  font-size: 1.4rem;
+  line-height: 1.8rem;
+  height: 3rem;
+  border-radius: 2rem;
+  background: #d9d9d9;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+}
+
+.showstorycard-detail-heading {
+  color: #fff;
+  padding: 0.5rem 0;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.05rem;
+}
+
+.showstorycard-detail-description {
+  color: #fff;
+  font-size: 1rem;
+  text-align: left;
+}
+
+.showstorycard-lower-btn-div {
+  display: grid;
+  grid-template-columns: auto auto;
+  padding-top: 1.5rem;
+  justify-content: space-around;
+  gap: 13rem;
+}
+
+.showstorycard-lower-btns {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #fff;
+}
+
+.showstorycard-like-btn {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: 1rem;
+}

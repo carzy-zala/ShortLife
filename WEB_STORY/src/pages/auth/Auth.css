@@ -1,0 +1,94 @@
+.auth-card {
+  width: 60rem;
+  height: 45rem;
+  border-radius: 2rem;
+  padding: 7.6rem 9.8rem;
+  margin: 5rem auto;
+  box-shadow: 0 0.4rem 3rem 0 #000;
+  /* FFFFFF40 */
+}
+
+.auth-form-cancel-div {
+  display: grid;
+  justify-content: end;
+}
+
+.auth-form-cancel {
+  outline: none;
+  border: none;
+  background-color: transparent;
+}
+
+.auth-form-heading {
+  font-size: 3rem;
+  line-height: 3.3rem;
+  text-align: center;
+  padding-bottom: 5.5rem;
+}
+
+.auth-form-grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto auto;
+  row-gap: 3.7rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-label {
+  font-size: 2rem;
+  line-height: 2.6rem;
+  padding-right: 7.5rem;
+}
+
+.auth-input-field {
+  width: 24.5rem;
+  height: 3.5rem;
+  border: 0.1rem solid black;
+  outline: none;
+  padding: 0 1rem;
+}
+
+.auth-input-field-password {
+  width: 21rem;
+  height: 3.3rem;
+  border: none;
+  outline: none;
+  padding: 0 1rem;
+}
+
+.auth-input-field-div {
+  width: 24.5rem;
+  height: 3.5rem;
+  border: 0.1rem solid black;
+  outline: none;
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+}
+
+.auth-eye-btn {
+  height: 100%;
+  width: 100%;
+  padding: 0.4rem 0.4rem 0 0;
+  outline: none;
+  border: none;
+  background-color: transparent;
+}
+
+.auth-form-submit-btn-div {
+  justify-content: center;
+  grid-column: 1 / span 2;
+  margin: 0 auto;
+}
+
+.auth-form-submit-btn {
+  width: 12.9rem;
+  height: 4.5rem;
+  border-radius: 2rem;
+  background: #73abff;
+  border: none;
+  outline: none;
+  font-size: 1.8rem;
+  line-height: 2.4rem;
+}
