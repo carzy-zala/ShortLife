@@ -1,0 +1,43 @@
+.logout-main-div {
+  position: absolute;
+  height: 100%;
+  background: black;
+  top: 0;
+  width: 100%;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
+.logout-div {
+  background: #fff;
+  width: 40rem;
+  height: 20rem;
+  padding: 5rem;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1rem ;
+  box-shadow: 0px 0.7rem 1.5rem 0px #8a898968;
+
+}
+
+.logout-text {
+  font-size: 1.8rem;
+}
+
+.logout-below-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.logout-below-btn {
+  padding: 1rem 4rem;
+  border: none;
+  background-color: transparent;
+  box-shadow: 0px 0.7rem 1.5rem 0px #00000068;
+  font-size: 1.8rem;
+  border-radius: 1rem;
+}

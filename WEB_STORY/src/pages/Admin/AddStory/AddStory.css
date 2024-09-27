@@ -6,9 +6,9 @@
   border-radius: 2rem;
   padding: 2rem 5rem;
   gap: 1rem;
-  box-shadow: 0px 0.4rem 3rem 0px #000;
-  /* #FFFFFF40; */
-  margin: 3rem auto;
+  background-color: #fff;
+  box-shadow: 0px 0.4rem 3rem 0px #FFFFFF40;
+  z-index: 999;
 }
 
 .addstory-story-div-cancel {

@@ -1,18 +1,18 @@
 .storycard-main-div {
-  width: 25.7rem;
-  height: 46rem;
+  width: 30.5rem;
+  height: 50rem;
   position: relative;
 }
 
-.storycard-main-btn{
+.storycard-main-btn {
   border: none;
   outline: none;
   background-color: transparent;
 }
 
 .storycard-image {
-  height: 459px;
-  width: 257px;
+  width: 30.5rem;
+  height: 50rem;
   border-radius: 1.5rem;
 }
 
@@ -46,12 +46,12 @@
   font-size: 2rem;
   font-weight: 600;
   letter-spacing: 0.05rem;
+  text-align: left;
 }
 
 .description {
   color: #fff;
   font-size: 1rem;
-  padding: 0 1.2rem;
   text-align: left;
 }
 
@@ -77,4 +77,28 @@
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1100px) {
+  .storycard-image {
+    width: 20rem;
+    height: 36rem;
+  }
+
+  .storycard-main-div {
+    width: 20rem;
+    height: 36rem;
+  }
+}
+
+@media screen and (min-width: 1100px) and (max-width: 1280px) {
+  .storycard-image {
+    width: 26.5rem;
+    height: 48rem;
+  }
+
+  .storycard-main-div {
+    width: 26.5rem;
+    height: 48rem;
+  }
 }

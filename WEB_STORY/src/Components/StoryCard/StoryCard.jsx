@@ -8,10 +8,11 @@ function StoryCard({
   description,
   isVideo = false,
   isImage = false,
+  isLogin = false,
+  key,
 }) {
-
   return (
-    <div className="storycard-main-div">
+    <div className="storycard-main-div" key={key && key}>
       <Button
         className="storycard-main-btn"
         onClick={() => {
@@ -49,6 +50,8 @@ function StoryCard({
         </div>
       )}
     </div>
+
+    
   );
 }
 

@@ -1,0 +1,11 @@
+@media screen and (min-width: 1024px) and (max-width: 1180px) {
+  .nav-header-hamburg-btn-div {
+    left: 79%;
+  }
+}
+
+@media screen and (min-width: 1550px) and (max-width: 2560px) {
+  .nav-header-hamburg-btn-div {
+    left: 90%;
+  }
+}

@@ -2,11 +2,12 @@
   width: 23.5rem;
   height: 23.5rem;
   position: relative;
-  margin: 10rem;
 }
 
 .filtercard-img {
   border-radius: 3.6rem;
+  width: 23.5rem;
+  height: 23.5rem;
 }
 
 .filtercard-btn-div {
@@ -30,4 +31,7 @@
   line-height: 3.906rem;
   text-align: center;
   color: #fff;
+}
+
+@media screen {
 }

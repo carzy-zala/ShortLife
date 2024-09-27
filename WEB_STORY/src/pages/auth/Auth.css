@@ -1,11 +1,11 @@
+
 .auth-card {
-  width: 60rem;
+  width: 58rem;
   height: 45rem;
   border-radius: 2rem;
   padding: 7.6rem 9.8rem;
-  margin: 5rem auto;
-  box-shadow: 0 0.4rem 3rem 0 #000;
-  /* FFFFFF40 */
+  box-shadow: 0 0.4rem 3rem 0 #ffffff40;
+  background-color: #ffffff;
 }
 
 .auth-form-cancel-div {
@@ -42,14 +42,6 @@
 }
 
 .auth-input-field {
-  width: 24.5rem;
-  height: 3.5rem;
-  border: 0.1rem solid black;
-  outline: none;
-  padding: 0 1rem;
-}
-
-.auth-input-field-password {
   width: 21rem;
   height: 3.3rem;
   border: none;
@@ -65,6 +57,10 @@
   display: grid;
   grid-template-columns: auto auto;
   align-items: center;
+}
+
+.auth-input-field-div-error{
+  border: 0.1rem solid red;
 }
 
 .auth-eye-btn {
@@ -91,4 +87,127 @@
   outline: none;
   font-size: 1.8rem;
   line-height: 2.4rem;
+}
+
+.auth-form-submit-btn:hover {
+  background: #4489f1;
+  color: white;
+}
+
+
+
+/* Checkmark */
+
+.check {
+  border: 0.2rem solid #069d06;
+  height: 2.5rem;
+  width: 2.5rem;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+/* tooltip */
+
+.username-input-field {
+  position: relative;
+}
+
+.username-tooltip {
+  visibility: hidden;
+  width: 30rem;
+  background-color: #98aefc;
+  color: #fff;
+  border-radius: 6px;
+  padding: 1rem;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.username-input-field .username-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border: 5px solid;
+  border-color: #98aefc transparent transparent transparent;
+}
+
+#username:hover + .username-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* error tooltip */
+.error-tooltip {
+  background-color: #e12b2b;
+  color: #fff;
+  border-radius: 6px;
+  padding: 1rem;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 0;
+  transition: opacity 0.3s;
+  visibility: hidden;
+}
+
+.error-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border: 5px solid;
+  border-color: #e12b2b transparent transparent transparent;
+}
+
+#username:hover + .error-tooltip{
+  visibility: visible;
+}
+
+#password:hover + .error-tooltip{
+  visibility: visible;
+}
+
+
+/* Password tooltip */
+.password-input-field {
+  position: relative;
+}
+
+.password-tooltip {
+  visibility: hidden;
+  width: 30rem;
+  background-color: #98aefc;
+  color: #fff;
+  border-radius: 6px;
+  padding: 1rem;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.password-input-field .password-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border: 5px solid;
+  border-color: #98aefc transparent transparent transparent;
+}
+
+#password:hover + .password-tooltip {
+  visibility: visible;
+  opacity: 1;
 }

@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { Button, Input, Select } from "../../../Components";
 import "./AddStory.css";
+import { toast } from "react-toastify";
 
-function AddStory() {
+function AddStory({ cancelHandle }) {
   const { register, handleSubmit, control } = useForm({
     defaultValues: {
-      stories: [
+      category: "",
+      slides: [
         {
           heading: "",
           description: "",
@@ -33,10 +35,11 @@ function AddStory() {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "stories",
+    name: "slides",
   });
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDeleteSlide = (index) => {
     remove(index);
@@ -54,14 +57,50 @@ function AddStory() {
     });
   };
 
+  const isSlideDataValid = (slides) => {
+    for (let i = 0; i < slides.length; i++) {
+      if (!slides[i].heading || slides[i].heading.trim() === "") {
+        toast.error(`Please enter heading of slide in ${i + 1} slide`);
+        setIsLoading(false);
+        return false;
+      }
+
+      if (!slides[i].description || slides[i].description.trim() === "") {
+        toast.error(`Please enter description of slide in ${i + 1} slide`);
+        setIsLoading(false);
+        return false;
+      }
+
+      if (!slides[i].url || slides[i].url.trim() === "") {
+        toast.error(`Please enter url of slide in ${i + 1} slide`);
+        setIsLoading(false);
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   const handlePostStory = (data) => {
-    console.log(data);
+    // handling error
+
+    if (!isLoading) {
+      const { slides } = data;
+      setIsLoading(true);
+
+      if (isSlideDataValid(slides)) {
+        console.log(data);
+      }
+    }
   };
 
   return (
     <div className="addstory-story-main-div">
       <div className="addstory-story-div-cancel">
-        <Button className="addstory-story-div-cancel-btn">
+        <Button
+          className="addstory-story-div-cancel-btn"
+          onClick={() => cancelHandle(false)}
+        >
           <img src="src/assets/slideCancel.svg" height="25px" width="25px" />
         </Button>
       </div>
@@ -108,34 +147,30 @@ function AddStory() {
           <div className="addstory-story-form">
             <label className="addstory-story-form-label">Heading :</label>
             <Input
-              key={`fields.${currentSlide}.heading`}
+              key={`slides.${currentSlide}.heading`}
               className="addstory-story-form-input"
               placeholder="Your Heading"
-              {...register(`fields.${currentSlide}.heading`, {
-                required: `Please enter heading in ${currentSlide + 1} slide`,
-              })}
+              {...register(`slides.${currentSlide}.heading`)}
             />
             <label className="addstory-story-form-label">Description :</label>
 
             <textarea
-              key={`fields.${currentSlide}.description`}
+              key={`slides.${currentSlide}.description`}
               name="postContent"
               rows={4}
               cols={40}
               className="addstory-story-form-input addstory-story-form-input-description"
               placeholder="Story Description"
-              {...register(`fields.${currentSlide}.description`)}
+              {...register(`slides.${currentSlide}.description`)}
             />
             <label className="addstory-story-form-label">
               Image/Video Link :
             </label>
             <Input
-              key={`fields.${currentSlide}.url`}
+              key={`slides.${currentSlide}.url`}
               className="addstory-story-form-input"
               placeholder="Add Image or Video Link"
-              {...register(`fields.${currentSlide}.url`, {
-                required: `Please enter heading in ${currentSlide + 1} slide`,
-              })}
+              {...register(`slides.${currentSlide}.url`)}
             />
             <label className="addstory-story-form-label">Category :</label>
             <Select />
@@ -147,12 +182,20 @@ function AddStory() {
                 <Button
                   children="Previous"
                   className="addstory-story-navigation-btn addstory-story-navigation-prev-btn"
+                  onClick={() =>
+                    setCurrentSlide((prev) => (prev > 0 ? prev - 1 : 0))
+                  }
                 />
               </div>
               <div>
                 <Button
                   children="Next"
                   className="addstory-story-navigation-btn addstory-story-navigation-next-btn"
+                  onClick={() =>
+                    setCurrentSlide((prev) =>
+                      prev < fields.length - 1 ? prev + 1 : prev
+                    )
+                  }
                 />
               </div>
             </div>

@@ -1,9 +1,9 @@
-import { Navbar } from "./Components";
-import AddStory from "./pages/Admin/AddStory/AddStory";
+import { Navbar, Loader } from "./Components";
+import Layout from "./layout/layout";
 import Auth from "./pages/auth/Auth";
 
 function App() {
-  return <AddStory />
+  return <Layout />;
 }
 
 export default App;

@@ -1,0 +1,58 @@
+/* Filter card */
+
+.home-main-div {
+  background-color: antiquewhite;
+  padding: 3.5rem 0 0 3.5rem;
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+.home-webstory-category {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: auto;
+  overflow-x: scroll;
+  gap: 3.5rem;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Stories */
+
+.home-webstory-stories-detail {
+  padding-top: 4rem;
+  display: grid;
+  grid-template-rows: 0fr 0fr 0fr;
+  gap: 3.6rem;
+}
+
+.home-webstory-stories-title {
+  font-family: DM Sans;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 3.9rem;
+  text-align: center;
+}
+
+.home-webstory-stories {
+  display: flex;
+  gap: 5rem;
+}
+
+.home-webstory-stories-more-div {
+  justify-self: center;
+}
+
+.home-webstory-stories-more {
+  width: 13.6rem;
+  height: 4.5rem;
+  border-radius: 2rem;
+  border: none;
+  font-size: 1.8rem;
+  line-height: 2.344rem;
+  text-align: center;
+  color: #fff;
+  background: #ff7373;
+}
