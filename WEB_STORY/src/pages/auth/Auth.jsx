@@ -8,8 +8,9 @@ import { apiRoutes } from "../../services/apiRoutes";
 import { toast } from "react-toastify";
 import { axiosGet, axiosPost } from "../../services/axios.config";
 import { useDispatch } from "react-redux";
-import { login } from "../../feature/useSlice";
+import { login,fetchOwnStories } from "../../feature/useSlice";
 import setToken from "../../utils/setToken";
+import axios from "axios";
 
 function Auth({ title, cancelHandel }) {
   const dispatch = useDispatch();
@@ -55,16 +56,16 @@ function Auth({ title, cancelHandel }) {
     const response = await axiosPost(loginUrl, { username, password });
 
     if (response.success) {
-      const { username, avatar } =
-        response.data.user;
+      const { username, avatar } = response.data.user;
 
-      const {accessToken,refreshToken} = response.data
+      const { accessToken, refreshToken } = response.data;
 
       axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
       setToken(accessToken, refreshToken);
 
       dispatch(login({ user: { username, avatar } }));
+      dispatch(fetchOwnStories());
 
       cancelHandel(false);
       toast.success(response.message);
@@ -139,219 +140,215 @@ function Auth({ title, cancelHandel }) {
   }, [watch("username")]);
 
   return (
-      <div className="auth-card">
-        <div className="auth-form-cancel-div">
-          <Button
-            className="auth-form-cancel"
-            onClick={() => cancelHandel(false)}
-          >
-            <img src="src/assets/authCancel.svg" />
-          </Button>
-        </div>
+    <div className="auth-card">
+      <div className="auth-form-cancel-div">
+        <Button
+          className="auth-form-cancel"
+          onClick={() => cancelHandel(false)}
+        >
+          <img src="src/assets/authCancel.svg" />
+        </Button>
+      </div>
 
-        <div className="auth-form-heading">{title}</div>
+      <div className="auth-form-heading">{title}</div>
 
-        <div>
-          <form
-            onSubmit={handleSubmit(
-              handleAuthFormSubmit,
-              handleAuthFormSubmitError
-            )}
-          >
-            <div className="auth-form-grid">
-              <label className="auth-label">Username</label>
-              <div>
-                <div
-                  className={`auth-input-field-div
+      <div>
+        <form
+          onSubmit={handleSubmit(
+            handleAuthFormSubmit,
+            handleAuthFormSubmitError
+          )}
+        >
+          <div className="auth-form-grid">
+            <label className="auth-label">Username</label>
+            <div>
+              <div
+                className={`auth-input-field-div
                 ${
                   errors.password &&
                   title === "Register" &&
                   "auth-input-field-div-error"
                 }
                 username-input-field`}
-                >
-                  <Input
-                    id="username"
-                    className="auth-input-field"
-                    placeholder="Enter username"
-                    {...register("username", {
-                      required: "Username can't be empty !",
-                      validate: (value) => {
-                        const hasLowerCase = /[a-z]/.test(value);
-                        const hasSpecialChar = /^[-_]*$/.test(
-                          value.replace(/[a-z\d]/g, "")
-                        );
-                        const hasUpperCase = /[A-Z]/.test(value);
-                        const hasSpace = /\s/.test(value);
-                        const minLength = value.length >= 3;
-                        if (!minLength) {
-                          return "Username must have at least 3 characters.";
-                        } else if (!hasLowerCase) {
-                          return "Username must contain at least one lowercase letter.";
-                        } else if (hasUpperCase) {
-                          return "Username must not contain uppercase letters.";
-                        } else if (hasSpace) {
-                          return "Username must not contain spaces.";
-                        } else if (!hasSpecialChar) {
-                          return "Only '-' and '_' allowed.";
-                        }
-                      },
-                    })}
-                  />
-                  {title !== "Login" &&
-                    !errors.username &&
-                    watch("username") &&
-                    watch("username").length > 3 &&
-                    (title === "Register" && isUsernameVerified ? (
-                      <div className="check">
-                        <FontAwesomeIcon
-                          icon={faCheck}
-                          size="xl"
-                          style={{ color: "#069d06" }}
-                        />
-                      </div>
-                    ) : (
-                      <Loader />
-                    ))}
-
-                  {!errors.username && title === "Register" && (
-                    <div className="username-tooltip">
-                      <ul>
-                        <li style={{ listStyle: "none" }}>
-                          Username must have 3 charcters
-                        </li>
-
-                        <li style={{ listStyle: "none" }}>
-                          Username must have at least one lowercase letter
-                        </li>
-                        <li style={{ listStyle: "none" }}>
-                          Username only have "-" and "_"
-                        </li>
-                        <li style={{ listStyle: "none" }}>
-                          Username can contain number
-                        </li>
-                        <li style={{ listStyle: "none", color: "#ee0000" }}>
-                          Uppercase letter are not allowed
-                        </li>
-                      </ul>
+              >
+                <Input
+                  id="username"
+                  className="auth-input-field"
+                  placeholder="Enter username"
+                  {...register("username", {
+                    required: "Username can't be empty !",
+                    validate: (value) => {
+                      const hasLowerCase = /[a-z]/.test(value);
+                      const hasSpecialChar = /^[-_]*$/.test(
+                        value.replace(/[a-z\d]/g, "")
+                      );
+                      const hasUpperCase = /[A-Z]/.test(value);
+                      const hasSpace = /\s/.test(value);
+                      const minLength = value.length >= 3;
+                      if (!minLength) {
+                        return "Username must have at least 3 characters.";
+                      } else if (!hasLowerCase) {
+                        return "Username must contain at least one lowercase letter.";
+                      } else if (hasUpperCase) {
+                        return "Username must not contain uppercase letters.";
+                      } else if (hasSpace) {
+                        return "Username must not contain spaces.";
+                      } else if (!hasSpecialChar) {
+                        return "Only '-' and '_' allowed.";
+                      }
+                    },
+                  })}
+                />
+                {title !== "Login" &&
+                  !errors.username &&
+                  watch("username") &&
+                  watch("username").length > 3 &&
+                  (title === "Register" && isUsernameVerified ? (
+                    <div className="check">
+                      <FontAwesomeIcon
+                        icon={faCheck}
+                        size="xl"
+                        style={{ color: "#069d06" }}
+                      />
                     </div>
-                  )}
+                  ) : (
+                    <Loader />
+                  ))}
 
-                  {errors.username && title === "Register" && (
-                    <div className="error-tooltip">
-                      <ul>
-                        <li style={{ listStyle: "none" }}>
-                          {errors.username.message}
-                        </li>
-                      </ul>
-                    </div>
-                  )}
-                </div>
+                {!errors.username && title === "Register" && (
+                  <div className="username-tooltip">
+                    <ul>
+                      <li style={{ listStyle: "none" }}>
+                        Username must have 3 charcters
+                      </li>
+
+                      <li style={{ listStyle: "none" }}>
+                        Username must have at least one lowercase letter
+                      </li>
+                      <li style={{ listStyle: "none" }}>
+                        Username only have "-" and "_"
+                      </li>
+                      <li style={{ listStyle: "none" }}>
+                        Username can contain number
+                      </li>
+                      <li style={{ listStyle: "none", color: "#ee0000" }}>
+                        Uppercase letter are not allowed
+                      </li>
+                    </ul>
+                  </div>
+                )}
+
+                {errors.username && title === "Register" && (
+                  <div className="error-tooltip">
+                    <ul>
+                      <li style={{ listStyle: "none" }}>
+                        {errors.username.message}
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </div>
-              <label className="auth-label">Password</label>
-              <div
-                className={`auth-input-field-div
+            </div>
+            <label className="auth-label">Password</label>
+            <div
+              className={`auth-input-field-div
                   ${
                     errors.password &&
                     title === "Register" &&
                     "auth-input-field-div-error"
                   }
                   password-input-field`}
-              >
-                <Input
-                  className="auth-input-field"
-                  id="password"
-                  placeholder="Enter password"
-                  type={`${isShow ? "text" : "password"}`}
-                  {...register("password", {
-                    required: "Password can't be empty !",
-                    validate: (value) => {
-                      const hasUpperCase = /[A-Z]/.test(value);
-                      const hasLowerCase = /[a-z]/.test(value);
-                      const hasNumber = /\d/.test(value);
-                      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(
-                        value
-                      );
-                      const minLength = value.length >= 8;
+            >
+              <Input
+                className="auth-input-field"
+                id="password"
+                placeholder="Enter password"
+                type={`${isShow ? "text" : "password"}`}
+                {...register("password", {
+                  required: "Password can't be empty !",
+                  validate: (value) => {
+                    const hasUpperCase = /[A-Z]/.test(value);
+                    const hasLowerCase = /[a-z]/.test(value);
+                    const hasNumber = /\d/.test(value);
+                    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+                    const minLength = value.length >= 8;
 
-                      if (!minLength) {
-                        return "Password must be at least 8 characters long";
-                      } else if (!hasUpperCase) {
-                        return "Password must contain at least one uppercase letter";
-                      } else if (!hasLowerCase) {
-                        return "Password must contain at least one lowercase letter";
-                      } else if (!hasNumber) {
-                        return "Password must contain at least one number";
-                      } else if (!hasSpecialChar) {
-                        return "Password must contain at least one special character";
-                      }
+                    if (!minLength) {
+                      return "Password must be at least 8 characters long";
+                    } else if (!hasUpperCase) {
+                      return "Password must contain at least one uppercase letter";
+                    } else if (!hasLowerCase) {
+                      return "Password must contain at least one lowercase letter";
+                    } else if (!hasNumber) {
+                      return "Password must contain at least one number";
+                    } else if (!hasSpecialChar) {
+                      return "Password must contain at least one special character";
+                    }
 
-                      return true; // Valid password
-                    },
-                  })}
-                />
+                    return true; // Valid password
+                  },
+                })}
+              />
 
-                {!errors.password && title === "Register" && (
-                  <div className="password-tooltip">
-                    <ul>
-                      <li style={{ listStyle: "none" }}>
-                        Password should have 8 charcters
-                      </li>
-                      <li style={{ listStyle: "none" }}>
-                        Password must have at least one uppercase letter
-                      </li>
-                      <li style={{ listStyle: "none" }}>
-                        Password must have at least one lowercase letter{" "}
-                      </li>
-                      <li style={{ listStyle: "none" }}>
-                        Password must have at least one special character
-                      </li>
-                      <li style={{ listStyle: "none" }}>
-                        Password must have at least one number
-                      </li>
-                    </ul>
-                  </div>
+              {!errors.password && title === "Register" && (
+                <div className="password-tooltip">
+                  <ul>
+                    <li style={{ listStyle: "none" }}>
+                      Password should have 8 charcters
+                    </li>
+                    <li style={{ listStyle: "none" }}>
+                      Password must have at least one uppercase letter
+                    </li>
+                    <li style={{ listStyle: "none" }}>
+                      Password must have at least one lowercase letter{" "}
+                    </li>
+                    <li style={{ listStyle: "none" }}>
+                      Password must have at least one special character
+                    </li>
+                    <li style={{ listStyle: "none" }}>
+                      Password must have at least one number
+                    </li>
+                  </ul>
+                </div>
+              )}
+
+              {errors.password && title === "Register" && (
+                <div className="error-tooltip">
+                  <ul>
+                    <li style={{ listStyle: "none" }}>
+                      {errors.password.message}
+                    </li>
+                  </ul>
+                </div>
+              )}
+              <Button className="auth-eye-btn" onClick={handleShowPassword}>
+                {!isShow ? (
+                  <FontAwesomeIcon icon={faEye} size="xl" />
+                ) : (
+                  <FontAwesomeIcon icon={faEyeSlash} size="xl" />
                 )}
-
-                {errors.password && title === "Register" && (
-                  <div className="error-tooltip">
-                    <ul>
-                      <li style={{ listStyle: "none" }}>
-                        {errors.password.message}
-                      </li>
-                    </ul>
-                  </div>
-                )}
-                <Button className="auth-eye-btn" onClick={handleShowPassword}>
-                  {!isShow ? (
-                    <FontAwesomeIcon icon={faEye} size="xl" />
-                  ) : (
-                    <FontAwesomeIcon icon={faEyeSlash} size="xl" />
-                  )}
-                </Button>
-              </div>
-
-              <div className="auth-form-submit-btn-div">
-                <Button
-                  type="submit"
-                  className="auth-form-submit-btn"
-                  children={
-                    !isLoading ? (
-                      title
-                    ) : (
-                      <div
-                        style={{ display: "grid", justifyContent: "center" }}
-                      >
-                        <Loader backgroundColor="white" />
-                      </div>
-                    )
-                  }
-                />
-              </div>
+              </Button>
             </div>
-          </form>
-        </div>
+
+            <div className="auth-form-submit-btn-div">
+              <Button
+                type="submit"
+                className="auth-form-submit-btn"
+                children={
+                  !isLoading ? (
+                    title
+                  ) : (
+                    <div style={{ display: "grid", justifyContent: "center" }}>
+                      <Loader backgroundColor="white" />
+                    </div>
+                  )
+                }
+              />
+            </div>
+          </div>
+        </form>
       </div>
+    </div>
   );
 }
 

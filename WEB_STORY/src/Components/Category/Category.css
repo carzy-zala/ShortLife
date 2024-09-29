@@ -5,6 +5,8 @@
 .category-webstory-category {
   display: flex;
   gap: 3.5rem;
+  padding: 1rem;
+  
 }
 
 .category-webstory-stories-detail {

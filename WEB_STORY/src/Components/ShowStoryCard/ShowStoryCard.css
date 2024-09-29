@@ -59,7 +59,7 @@
 }
 
 .loader-line-transition {
-  animation: l1 5s none linear;
+  animation: l1 15s none linear;
 }
 @keyframes l1 {
   100% {
@@ -93,8 +93,8 @@
     #000000
   );
   border-radius: 0 0 1.1rem 1.1rem;
-  grid-template-rows: 1fr;
   display: grid;
+  grid-template-rows: 1fr;
   align-items: end;
 }
 
@@ -113,7 +113,7 @@
 .showstorycard-detail-heading {
   color: #fff;
   padding: 0.5rem 0;
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 600;
   letter-spacing: 0.05rem;
 }

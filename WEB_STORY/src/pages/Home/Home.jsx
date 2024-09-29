@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Home.css";
 import { Button, FilterCard, StoryCard } from "../../Components";
 import { useSelector } from "react-redux";
@@ -9,70 +9,16 @@ function Home() {
 
   const categories = useSelector((store) => store.categories.categories) || [];
 
-  const stories = [
-    {
-      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_Fqa1zGrADMg4kKba6B2OdEZZ-ZgBYbTw3g&s",
-      heading: "Story sample heading",
-      description:
-        "Story sample description Story sample description Story sample discription",
-      isVideo: false,
-      isImage: true,
-    },
-    {
-      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_Fqa1zGrADMg4kKba6B2OdEZZ-ZgBYbTw3g&s",
-      heading: "Story sample heading",
-      description:
-        "Story sample description Story sample description Story sample discription",
-      isVideo: false,
-      isImage: true,
-    },
-    {
-      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_Fqa1zGrADMg4kKba6B2OdEZZ-ZgBYbTw3g&s",
-      heading: "Story sample heading",
-      description:
-        "Story sample description Story sample description Story sample discription",
-      isVideo: false,
-      isImage: true,
-    },
-    {
-      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_Fqa1zGrADMg4kKba6B2OdEZZ-ZgBYbTw3g&s",
-      heading: "Story sample heading",
-      description:
-        "Story sample description Story sample description Story sample discription",
-      isVideo: false,
-      isImage: true,
-    },
-    {
-      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_Fqa1zGrADMg4kKba6B2OdEZZ-ZgBYbTw3g&s",
-      heading: "Story sample heading",
-      description:
-        "Story sample description Story sample description Story sample discription",
-      isVideo: false,
-      isImage: true,
-    },
-    {
-      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_Fqa1zGrADMg4kKba6B2OdEZZ-ZgBYbTw3g&s",
-      heading: "Story sample heading",
-      description:
-        "Story sample description Story sample description Story sample discription",
-      isVideo: false,
-      isImage: true,
-    },
-  ];
+  const stories = useSelector((store) => store.story.stories) || [];
+
+  const ownstories = useSelector((store) => store.user.ownstories) || [];
+
+  const [currentFilter, setCurrentFilter] = useState(0);
 
   return (
     <div className="home-main-div">
       <div className="home-webstory-category">
-        {categories.map((category) => {
-          return (
-            <div key={category.text}>
-              <FilterCard
-                childrenImage={category.imageUrl}
-                childrenText={category.text}
-              />
-            </div>
-          );
-        })}
+        <FilterCard />
       </div>
 
       {isAuthenticated && (
@@ -80,15 +26,16 @@ function Home() {
           <div className="home-webstory-stories-title">Your stories</div>
 
           <div className="home-webstory-stories">
-            {stories.map((story, index) => {
+            {ownstories.map((story, index) => {
               return (
                 index < 4 && (
                   <StoryCard
-                    key={index}
+                    storyId={story.storyId}
+                    key={story._id}
                     url={story.url}
                     heading={story.heading}
                     description={story.description}
-                    isImage={story.isImage}
+                    isImage={true}
                     isVideo={story.isVideo}
                     isLogin={true}
                   />
@@ -108,42 +55,41 @@ function Home() {
         </div>
       )}
 
-      {categories.length &&
-        categories.map((category, index) => {
+      {stories.length &&
+        stories.map((story, index) => {
           return (
-            index && (
-              <div className="home-webstory-stories-detail">
-                <div className="home-webstory-stories-title">
-                  Top Stories About {`${category.text}`}
-                </div>
-
-                <div className="home-webstory-stories">
-                  {stories.map((story, index) => {
-                    return (
-                      index < 4 && (
-                        <StoryCard
-                          key={index}
-                          url={story.url}
-                          heading={story.heading}
-                          description={story.description}
-                          isImage={story.isImage}
-                          isVideo={story.isVideo}
-                        />
-                      )
-                    );
-                  })}
-                </div>
-
-                <div className="home-webstory-stories-more-div">
-                  {stories.length > 4 && (
-                    <Button
-                      className="home-webstory-stories-more"
-                      children="See more"
-                    />
-                  )}
-                </div>
+            <div className="home-webstory-stories-detail">
+              <div className="home-webstory-stories-title">
+                Top Stories About {`${story.category}`}
               </div>
-            )
+
+              <div className="home-webstory-stories">
+                {story.slides.map((slide, index) => {
+                  return (
+                    index < 4 && (
+                      <StoryCard
+                        storyId={story.storyId}
+                        key={slide._id}
+                        url={slide.url}
+                        heading={slide.heading}
+                        description={slide.description}
+                        isImage={true}
+                        isVideo={slide.isVideo}
+                      />
+                    )
+                  );
+                })}
+              </div>
+
+              <div className="home-webstory-stories-more-div">
+                {story.slides.length > 4 && (
+                  <Button
+                    className="home-webstory-stories-more"
+                    children="See more"
+                  />
+                )}
+              </div>
+            </div>
           );
         })}
     </div>

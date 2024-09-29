@@ -1,128 +1,180 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ShowStoryCard.css";
 import { Button } from "../../Components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
+import { axiosGet } from "../../services/axios.config";
+import { apiRoutes } from "../../services/apiRoutes";
 
 function ShowStoryCard({
-  url,
-  heading,
-  description,
-  isVideo = false,
-  isImage = false,
-}) {
+  storyId,
 
-  const isLiked = true;
-  const isBookmarked = true;
-  const current = 3;
+  cancelHandle,
+}) {
+  const [isLiked, setIsLiked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlideLoader, setCurrentSlideLoader] = useState(0);
 
   const [isShareClick, setIsShareClick] = useState(false);
+  const [slides, setSlides] = useState([]);
 
-  const handleShare = () => {
+  useEffect(() => {
+    (async () =>
+      await axiosGet(
+        `${import.meta.env.VITE_HOST_API_URL}${apiRoutes.STORY}`.replace(
+          ":storyId",
+          storyId
+        )
+      ).then((response) => setSlides(response.data.slides)))();
+  }, []);
+
+  const handleShare = (slideIndex) => {
     setIsShareClick(true);
 
     setTimeout(() => {
       setIsShareClick(false);
     }, 3000);
+
+    const storyUrl = `${window.location.origin}/${storyId}/${slideIndex}`;
+
+    window.navigator.clipboard.writeText(storyUrl);
   };
 
+  setTimeout(() => {
+    if (currentSlide < slides.length - 1) setCurrentSlide(currentSlide + 1);
+    if (currentSlideLoader !== slides.length)
+      setCurrentSlideLoader(currentSlideLoader + 1);
+  }, 15000);
+
   return (
-    <div className="showstorycard-main-div">
-      <div>
-        <Button
-          className="showstorycard-arraow-btns"
-          onClick={() => {
-            console.log("arrow left click");
-          }}
-        >
-          <img src="src/assets/leftArrow.svg" />
-        </Button>
-      </div>
-
-      <div className="showstorycard-story-div">
-        {isImage && <img src={url} className="showstorycard-image" />}
-        {isVideo}
-
-        <div className="showstorycard-header">
-          <div className="showstorycard-loader-div">
-            <div
-              className={`loader-line ${1 < 3 && "loader-line-completed"}
-                 ${current === 1 && "loader-line-transition"}`}
-            ></div>
-            <div
-              className={`loader-line ${2 < 3 && "loader-line-completed"}
-                 ${current === 2 && "loader-transition"}`}
-            ></div>
-            <div
-              className={`loader-line ${3 < 3 && "loader-line-completed"}
-                 ${current === 3 && "loader-transition"}`}
-            ></div>
-          </div>
-
-          <div className="showstorycard-header-btns">
-            <Button className="showstorycard-header-btn">
-              <img src="src/assets/cancel.svg" />
-            </Button>
-            <Button className="showstorycard-header-btn" onClick={handleShare}>
-              <img src="src/assets/send.svg" />
-            </Button>
-          </div>
+    slides.length && (
+      <div key={slides[currentSlide]._id} className="showstorycard-main-div">
+        <div>
+          <Button
+            className="showstorycard-arraow-btns"
+            onClick={() => {
+              if (currentSlide) {
+                setCurrentSlide(currentSlide - 1);
+                setCurrentSlideLoader(currentSlide - 1);
+              }
+            }}
+          >
+            <img src="src/assets/leftArrow.svg" />
+          </Button>
         </div>
 
-        <div className="showstorycard-bottom">
-          {isShareClick && (
-            <div className="showstorycard-bottom-copy-link">
-              Link copied to clipboard
-            </div>
-          )}
+        <div className="showstorycard-story-div">
+          {
+            <img
+              src={slides[currentSlide].url}
+              className="showstorycard-image"
+            />
+          }
+          {/*isVideo*/}
 
-          <div style={{ gridRow: "2" }}>
-            <div className="showstorycard-detail-heading">{heading}</div>
-            <div className="showstorycard-detail-description">
-              {description}
+          <div className="showstorycard-header">
+            <div className="showstorycard-loader-div">
+              {slides.map((slide, index) => {
+                return (
+                  <div
+                    className={`loader-line ${
+                      index < currentSlideLoader && "loader-line-completed"
+                    }
+                     ${
+                       currentSlideLoader === index && "loader-line-transition"
+                     }`}
+                  ></div>
+                );
+              })}
             </div>
-          </div>
 
-          <div className="showstorycard-lower-btn-div" style={{ gridRow: "3" }}>
-            <div>
+            <div className="showstorycard-header-btns">
               <Button
-                className={`showstorycard-lower-btns `}
-                style={{ paddingLeft: "2rem" }}
+                className="showstorycard-header-btn"
+                onClick={() => {
+                  cancelHandle(false);
+                }}
               >
-                <FontAwesomeIcon
-                  icon={faBookmark}
-                  size="2xl"
-                  style={{ color: `${isLiked && "#085cff"}` }}
-                />
+                <img src="src/assets/cancel.svg" />
               </Button>
-            </div>
-            <div>
               <Button
-                className={`showstorycard-lower-btns showstorycard-like-btn  `}
+                className="showstorycard-header-btn"
+                onClick={() => handleShare(currentSlide)}
               >
-                <FontAwesomeIcon
-                  icon={faHeart}
-                  size="2xl"
-                  style={{ color: `${isLiked && "#ff0000"}` }}
-                />
-                <div>1206</div>
+                <img src="src/assets/send.svg" />
               </Button>
             </div>
           </div>
+
+          <div className="showstorycard-bottom">
+            {isShareClick && (
+              <div
+                className="showstorycard-bottom-copy-link"
+                style={{ gridRow: "1" }}
+              >
+                Link copied to clipboard
+              </div>
+            )}
+            <div style={{ gridRow: "2" }}>
+              <div className="showstorycard-detail-heading">
+                {slides[currentSlide].heading}
+              </div>
+              <div className="showstorycard-detail-description">
+                {slides[currentSlide].description}
+              </div>
+            </div>
+
+            <div
+              className="showstorycard-lower-btn-div"
+              style={{ gridRow: "3" }}
+            >
+              <div>
+                <Button
+                  className={`showstorycard-lower-btns `}
+                  style={{ paddingLeft: "2rem" }}
+                  onClick={() => setIsBookmarked(!isBookmarked)}
+                >
+                  <FontAwesomeIcon
+                    icon={faBookmark}
+                    size="2xl"
+                    style={{ color: `${isBookmarked ? "#085cff" : "#fff"}` }}
+                  />
+                </Button>
+              </div>
+              <div>
+                <Button
+                  className={`showstorycard-lower-btns showstorycard-like-btn  `}
+                  onClick={() => setIsLiked(!isLiked)}
+                >
+                  <FontAwesomeIcon
+                    icon={faHeart}
+                    size="2xl"
+                    style={{ color: `${isLiked ? "#ff0000" : "#fff"}` }}
+                  />
+                  <div>{`${slides[currentSlide].likes}`}</div>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <Button
+            className="showstorycard-arraow-btns"
+            onClick={() => {
+              if (currentSlide !== slides.length) {
+                setCurrentSlide(currentSlide + 1);
+                setCurrentSlideLoader(currentSlide + 1);
+              }
+            }}
+          >
+            <img src="src/assets/rightArrow.svg" />
+          </Button>
         </div>
       </div>
-
-      <div>
-        <Button
-          className="showstorycard-arraow-btns"
-          onClick={() => {
-            console.log("arrow right click");
-          }}
-        >
-          <img src="src/assets/rightArrow.svg" />
-        </Button>
-      </div>
-    </div>
+    )
   );
 }
 

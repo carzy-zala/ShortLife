@@ -2,7 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import Home from "../pages/Home/Home";
 import Bookmarks from "../pages/Admin/bookmark/Bookmarks";
-import { Category } from "../Components";
+import { Category, ShowStoryCard } from "../Components";
+import ShareStoryCard from "../Components/ShareStoryCard/ShareStorycard";
 
 export const router = createBrowserRouter([
   {
@@ -10,7 +11,7 @@ export const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       {
-        path: "",
+        path: "/All",
         element: <Home />,
       },
       {
@@ -22,6 +23,11 @@ export const router = createBrowserRouter([
         element: <Category />,
       },
     ],
+  },
+
+  {
+    path: "/:storyId/:slideIndex",
+    element: <ShareStoryCard />,
   },
 
   ,

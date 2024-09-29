@@ -11,6 +11,12 @@ const initialState = {
   ownstories: [],
 };
 
+export const fetchOwnStories = createAsyncThunk("user/fetchOwnStories", () => {
+  return axiosGet(
+    `${import.meta.env.VITE_HOST_API_URL}${apiRoutes.OWN_STORIES}`
+  ).then((response) => response.data.slides);
+});
+
 const userReducer = createSlice({
   name: "user",
   initialState,
@@ -32,6 +38,11 @@ const userReducer = createSlice({
     reset: (state) => {
       state = { ...initialState };
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchOwnStories.fulfilled, (state, action) => {
+      state.ownstories = action.payload;
+    });
   },
 });
 

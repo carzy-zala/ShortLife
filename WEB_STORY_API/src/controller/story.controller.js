@@ -66,7 +66,7 @@ const categoryStories = asyncHandler(async (req, res) => {
 
   const storiesId = await Story.find({ category: categoryId })
     .select("_id")
-    .sort({ _id: -1 })
+    .sort({ _id: 1 })
     .skip(skip)
     .limit(limit);
 
@@ -101,16 +101,13 @@ const allStories = asyncHandler(async (req, res) => {
 
     const storiesWithSlide = await Promise.all(storySlide);
 
-    console.log(storiesWithSlide);
-
     return {
       category: category.text,
-      stories: storiesWithSlide,
+      slides: storiesWithSlide,
     };
   });
 
   const stories = await Promise.all(categoryStories);
-  console.log(stories);
 
   res
     .status(200)
@@ -119,4 +116,16 @@ const allStories = asyncHandler(async (req, res) => {
     );
 });
 
-export { addStory, categoryStories, allStories };
+const story = asyncHandler(async (req, res) => {
+  const { storyId } = req.params;
+
+
+  const slides = await Slide.find({ storyId: storyId }).sort({ _id: -1 });
+
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, { slides }, "Story fetched succesfully !"));
+});
+
+export { addStory, categoryStories, allStories, story };

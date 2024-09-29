@@ -7,6 +7,7 @@ function StoryCard({
   url,
   heading,
   description,
+  storyId,
   isVideo = false,
   isImage = false,
   isLogin = false,
@@ -57,11 +58,8 @@ function StoryCard({
         createPortal(
           <div className="portal-div">
             <ShowStoryCard
-              url={url}
-              heading={heading}
-              description={description}
-              isVideo={isVideo}
-              isImage={isImage}
+              storyId={storyId}
+              cancelHandle={setIsStoryClick}
             />
           </div>,
           document.body

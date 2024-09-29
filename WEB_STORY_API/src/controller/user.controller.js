@@ -139,6 +139,7 @@ const login = asyncHandler(async (req, res) => {
 
 //#endregion
 
+//#region bookmark
 const bookmark = asyncHandler(async (req, res) => {
   const { _id } = req.user;
 
@@ -148,7 +149,7 @@ const bookmark = asyncHandler(async (req, res) => {
     throw new ApiError(400, "ERROR :: Error during fetching bookmark !");
   }
 
-  const bookmarkArray = userBookmarks.bookmark.map(async (slide) => {    
+  const bookmarkArray = userBookmarks.bookmark.map(async (slide) => {
     return await Slide.findById(slide);
   });
 
@@ -157,6 +158,9 @@ const bookmark = asyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, { bookmark }, "Your bookmarks !"));
 });
 
+//#endregion
+
+//#region  addBookmark
 const addBookmark = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   const { slideId } = req.body;
@@ -174,14 +178,32 @@ const addBookmark = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Added to bookmark succesfully !"));
 });
 
+//#endregion
+
+//#region  ownstories
+
 const ownStories = asyncHandler(async (req, res) => {
   const { _id } = req.user;
 
   const stories = await Story.find({ createdBy: _id });
 
+  const slides = stories.map(async (story) => {
+    return await Slide.findOne({storyId : story._id});
+  });
+
+  const storyWithSlide = await Promise.all(slides);
+
   res
     .status(200)
-    .json(new ApiResponse(200, { stories }, "You created this much stories ."));
+    .json(
+      new ApiResponse(
+        200,
+        { slides: storyWithSlide },
+        "You created this much stories ."
+      )
+    );
 });
+
+//#endregion
 
 export { isUsernameExist, register, login, bookmark, addBookmark, ownStories };

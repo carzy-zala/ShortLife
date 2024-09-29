@@ -13,6 +13,7 @@
   overflow: auto;
   overflow-x: scroll;
   gap: 3.5rem;
+  padding: 1rem;
 }
 
 ::-webkit-scrollbar {

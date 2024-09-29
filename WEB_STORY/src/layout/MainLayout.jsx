@@ -1,16 +1,17 @@
 import React, { Fragment, useEffect } from "react";
 import { Navbar } from "../Components";
 import { Outlet } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchCategory } from "../feature/categorySlice";
 import axios from "axios";
 import setToken from "../utils/setToken";
+import { fetchStories } from "../feature/storySlice";
+import { fetchOwnStories } from "../feature/useSlice";
 
 function MainLayout() {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchCategory());
-  }, []);
+
+  const isAuthenticated = useSelector((store) => store.user.isAuthenticated);
 
   useEffect(() => {
     const accesstoken = localStorage.getItem("accessToken");
@@ -24,6 +25,14 @@ function MainLayout() {
         : setToken(accesstoken);
     }
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchCategory());
+    dispatch(fetchStories());
+    if (isAuthenticated) dispatch(fetchOwnStories());
+  }, []);
+
+  
 
   return (
     <Fragment>
