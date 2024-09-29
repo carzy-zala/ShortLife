@@ -1,9 +1,8 @@
-import { Navbar, Loader } from "./Components";
-import Layout from "./layout/layout";
-import Auth from "./pages/auth/Auth";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./Routes/index.jsx";
 
 function App() {
-  return <Layout />;
+  return <RouterProvider router={router} />;
 }
 
 export default App;

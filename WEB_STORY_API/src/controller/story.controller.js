@@ -50,5 +50,73 @@ const addStory = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, {}, "Story created succesfully ."));
 });
 
+const categoryStories = asyncHandler(async (req, res) => {
+  const { category } = req.params;
 
-export { addStory};
+  const categoryId = await Category.findOne({ text: category }).select("_id");
+
+  if (!categoryId) {
+    throw new ApiError(400, "ERROR :: Can't get your category !");
+  }
+
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 12;
+
+  const skip = (page - 1) * limit;
+
+  const storiesId = await Story.find({ category: categoryId })
+    .select("_id")
+    .sort({ _id: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  if (storiesId.length) {
+    const storiesSlide = storiesId.map(async (storyId) => {
+      return await Slide.findOne({ storyId: storyId._id }).select(
+        "heading description url storyId"
+      );
+    });
+
+    const stories = await Promise.all(storiesSlide);
+
+    res
+      .status(200)
+      .json(new ApiResponse(200, { stories }, `Stories of ${category}`));
+  } else {
+    throw new ApiError(500, "ERROR :: Interanal server error !");
+  }
+});
+
+const allStories = asyncHandler(async (req, res) => {
+  const categories = await Category.find();
+
+  const categoryStories = categories.map(async (category) => {
+    const categoryStories = await Story.find({ category: category._id })
+      .limit(12)
+      .select("_id");
+
+    const storySlide = categoryStories.map(async (story) => {
+      return await Slide.findOne({ storyId: story._id });
+    });
+
+    const storiesWithSlide = await Promise.all(storySlide);
+
+    console.log(storiesWithSlide);
+
+    return {
+      category: category.text,
+      stories: storiesWithSlide,
+    };
+  });
+
+  const stories = await Promise.all(categoryStories);
+  console.log(stories);
+
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, { stories }, "Your stories fetched succesfully !")
+    );
+});
+
+export { addStory, categoryStories, allStories };

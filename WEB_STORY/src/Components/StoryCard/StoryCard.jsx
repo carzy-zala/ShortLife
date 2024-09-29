@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import "./StoryCard.css";
-import { Button } from "../../Components";
+import { Button, ShowStoryCard } from "../../Components";
+import { createPortal } from "react-dom";
 
 function StoryCard({
   url,
@@ -9,49 +10,63 @@ function StoryCard({
   isVideo = false,
   isImage = false,
   isLogin = false,
-  key,
 }) {
+  const [storyClick, setIsStoryClick] = useState(false);
+
   return (
-    <div className="storycard-main-div" key={key && key}>
-      <Button
-        className="storycard-main-btn"
-        onClick={() => {
-          console.log("click story");
-        }}
-      >
-        {isImage && <img src={url} className="storycard-image" />}
-        {isVideo}
-
-        <div className="storycard-header"></div>
-
-        <div
-          className={`storycard-bottom ${isLogin && "storycard-edit-bottom"}`}
+    <div>
+      <div className="storycard-main-div">
+        <Button
+          className="storycard-main-btn"
+          onClick={() => {
+            setIsStoryClick(true);
+          }}
         >
-          <div>
-            <div className="heading">{heading}</div>
-            <div className="description">{description}</div>
+          {isImage && <img src={url} className="storycard-image" />}
+          {isVideo}
+
+          <div className="storycard-header"></div>
+
+          <div
+            className={`storycard-bottom ${isLogin && "storycard-edit-bottom"}`}
+          >
+            <div>
+              <div className="heading">{heading}</div>
+              <div className="description">{description}</div>
+            </div>
           </div>
-        </div>
-      </Button>
+        </Button>
 
-      {isLogin && (
-        <div className="storycard-edit-btn-div">
-          <Button
-            children={
-              <div className="storycard-edit-btn-inner-content">
-                <img src="src/assets/edit.svg" /> Edit
-              </div>
-            }
-            className="storycard-edit-btn"
-            onClick={() => {
-              console.log("click edit");
-            }}
-          />
-        </div>
-      )}
+        {isLogin && (
+          <div className="storycard-edit-btn-div">
+            <Button
+              children={
+                <div className="storycard-edit-btn-inner-content">
+                  <img src="src/assets/edit.svg" /> Edit
+                </div>
+              }
+              className="storycard-edit-btn"
+              onClick={() => {
+                console.log("click edit");
+              }}
+            />
+          </div>
+        )}
+      </div>
+      {storyClick &&
+        createPortal(
+          <div className="portal-div">
+            <ShowStoryCard
+              url={url}
+              heading={heading}
+              description={description}
+              isVideo={isVideo}
+              isImage={isImage}
+            />
+          </div>,
+          document.body
+        )}
     </div>
-
-    
   );
 }
 

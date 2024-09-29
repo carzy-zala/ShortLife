@@ -40,7 +40,6 @@ export const axiosGet = async (
     
     response = { ...generateResponse(result.data) };
   } catch (error) {
-    console.log("errror",error);
     
     response = { ...generateError(error) };
   }

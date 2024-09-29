@@ -18,3 +18,15 @@
 body {
   background-color: var(--main-background);
 }
+
+.portal-div {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  background-color: #000000e5;
+  height: 100vh;
+  z-index: 1;
+}

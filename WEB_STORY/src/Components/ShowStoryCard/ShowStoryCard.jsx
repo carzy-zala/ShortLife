@@ -11,6 +11,7 @@ function ShowStoryCard({
   isVideo = false,
   isImage = false,
 }) {
+
   const isLiked = true;
   const isBookmarked = true;
   const current = 3;
@@ -45,15 +46,15 @@ function ShowStoryCard({
         <div className="showstorycard-header">
           <div className="showstorycard-loader-div">
             <div
-              className={`loader ${1 < 3 && "loader-completed"}
-                 ${current === 1 && "loader-transition"}`}
+              className={`loader-line ${1 < 3 && "loader-line-completed"}
+                 ${current === 1 && "loader-line-transition"}`}
             ></div>
             <div
-              className={`loader ${2 < 3 && "loader-completed"}
+              className={`loader-line ${2 < 3 && "loader-line-completed"}
                  ${current === 2 && "loader-transition"}`}
             ></div>
             <div
-              className={`loader ${3 < 3 && "loader-completed"}
+              className={`loader-line ${3 < 3 && "loader-line-completed"}
                  ${current === 3 && "loader-transition"}`}
             ></div>
           </div>

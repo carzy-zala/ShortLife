@@ -60,6 +60,8 @@ function Auth({ title, cancelHandel }) {
 
       const {accessToken,refreshToken} = response.data
 
+      axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+
       setToken(accessToken, refreshToken);
 
       dispatch(login({ user: { username, avatar } }));

@@ -5,4 +5,6 @@ const categoryRoutes = Router();
 
 categoryRoutes.route("/categories").get(allCategories);
 
+
+
 export default categoryRoutes;

@@ -27,6 +27,7 @@ import {
 import storage from "redux-persist/lib/storage";
 import userReducer from "../feature/useSlice.js";
 import storiesReducer from "../feature/storySlice.js";
+import categoryReducer from "../feature/categorySlice.js";
 
 const persistConfig = {
   key: "root",
@@ -37,6 +38,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user: userReducer,
   stories: storiesReducer,
+  categories: categoryReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

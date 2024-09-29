@@ -2,7 +2,8 @@ import { User } from "../model/user.model.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import Story from "../model/story.model.js"
+import Story from "../model/story.model.js";
+import Slide from "../model/slide.model.js";
 
 //#region Token generation
 
@@ -141,11 +142,17 @@ const login = asyncHandler(async (req, res) => {
 const bookmark = asyncHandler(async (req, res) => {
   const { _id } = req.user;
 
-  const bookmark = await User.findById(_id).select("bookmark");
+  const userBookmarks = await User.findById(_id).select("bookmark");
 
-  if (!bookmark) {
+  if (!userBookmarks) {
     throw new ApiError(400, "ERROR :: Error during fetching bookmark !");
   }
+
+  const bookmarkArray = userBookmarks.bookmark.map(async (slide) => {    
+    return await Slide.findById(slide);
+  });
+
+  const bookmark = await Promise.all(bookmarkArray);
 
   res.status(200).json(new ApiResponse(200, { bookmark }, "Your bookmarks !"));
 });

@@ -6,6 +6,7 @@ import Select from "./Select/Select";
 import ShowStoryCard from "./ShowStoryCard/ShowStoryCard";
 import Navbar from "./Navbar/Navbar";
 import Loader from "./Loader/Loader";
+import Category from "./Category/Category";
 
 export {
   Button,
@@ -16,4 +17,5 @@ export {
   ShowStoryCard,
   Navbar,
   Loader,
+  Category
 };

@@ -12,10 +12,13 @@ import { reset } from "../../feature/useSlice";
 import setToken from "../../utils/setToken";
 import { persistor } from "../../store/store.js";
 import AddStory from "../../pages/Admin/AddStory/AddStory.jsx";
+import {useNavigate} from "react-router-dom"
 
 function Navbar() {
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
+
+  const nevigate = useNavigate();
 
   const [isRegisterClick, setIsRegisterClick] = useState(false);
   const [isLoginClick, setIsLoginClick] = useState(false);
@@ -61,6 +64,7 @@ function Navbar() {
             <Button
               className="nav-header-btn nav-header-bookmark-btn"
               style={{ backgroundColor: "#FF7373" }}
+              onClick={() => {nevigate("/bookmark")}}
             >
               <FontAwesomeIcon icon={faBookmark} />
               Bookmarks

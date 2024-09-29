@@ -1,11 +1,16 @@
 import { Router } from "express";
-import { addStory } from "../controller/story.controller.js";
+import {
+  addStory,
+  allStories,
+  categoryStories,
+} from "../controller/story.controller.js";
 import { verifyJWT } from "../middleware/auth.middelware.js";
 
 const storyRoutes = Router();
 
-storyRoutes.use(verifyJWT);
+storyRoutes.route("/addStory").post(verifyJWT, addStory);
 
-storyRoutes.route("/addStory").post(addStory);
+storyRoutes.route("/stories").get(allStories);
+storyRoutes.route("/:category").get(categoryStories);
 
 export default storyRoutes;
