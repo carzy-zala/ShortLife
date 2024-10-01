@@ -8,6 +8,7 @@ import {
   login,
   register,
   ownStories,
+  likes,
 } from "../controller/user.controller.js";
 
 const userRoutes = Router();
@@ -20,5 +21,6 @@ userRoutes.route("/bookmark").get(verifyJWT, bookmark);
 userRoutes.route("/addBookmark").patch(verifyJWT, addBookmark);
 
 userRoutes.route("/stories").get(verifyJWT, ownStories);
+userRoutes.route("/likes").get(verifyJWT, likes);
 
 export default userRoutes;

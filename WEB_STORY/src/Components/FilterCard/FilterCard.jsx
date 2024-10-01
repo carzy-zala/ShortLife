@@ -7,17 +7,15 @@ import { useSelector } from "react-redux";
 function FilterCard({ categoryText = "All" }) {
   const categories = useSelector((store) => store.categories.categories) || [];
 
-  const [currentFilterText, setCurrentFilterText] = useState(categoryText);
 
   const navigate = useNavigate();
 
   const handleFilterClick = (category) => {
-    setCurrentFilterText(category);
-    navigate(`/${category}`);
+    category === "All" ? navigate(`/`) : navigate(`/${category}`);
   };
 
   return categories.map((category, index) => (
-    <div key={category._id} className="filtercard-main-div">
+    <div key={`${category._id}.${category}`} className="filtercard-main-div">
       <img
         src={category.imageUrl}
         height="100%"
@@ -28,7 +26,7 @@ function FilterCard({ categoryText = "All" }) {
       />
       <div className="filtercard-btn-div">
         <Button
-          onClick={() => handleFilterClick(category.text, index)}
+          onClick={() => handleFilterClick(category.text)}
           className="filtercard-btn"
         >
           {category.text}

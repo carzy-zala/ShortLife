@@ -27,6 +27,6 @@ body {
   justify-content: center;
   align-items: center;
   background-color: #000000e5;
-  height: 100vh;
+  height: 100%;
   z-index: 1;
 }

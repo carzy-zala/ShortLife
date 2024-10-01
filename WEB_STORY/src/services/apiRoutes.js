@@ -7,6 +7,7 @@ const apiRoutes = {
   BOOKMARK: "/user/bookmark",
   ADD_BOOKMARK : "/user/addBookmark",
   OWN_STORIES : "/user/stories",
+  LIKES : "/user/likes",
 
   // categories
 
@@ -22,6 +23,7 @@ const apiRoutes = {
   // slide
 
   ADD_LIKE : "/slide/addLike/:slideId",
+  REMOVE_LIKE : "/slide/removeLike/:slideId",
 };
 
 export { apiRoutes };

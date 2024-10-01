@@ -1,9 +1,8 @@
-
 .auth-card {
   width: 58rem;
   height: 45rem;
   border-radius: 2rem;
-  padding: 7.6rem 9.8rem;
+  padding: 4rem ;
   box-shadow: 0 0.4rem 3rem 0 #ffffff40;
   background-color: #ffffff;
 }
@@ -59,7 +58,7 @@
   align-items: center;
 }
 
-.auth-input-field-div-error{
+.auth-input-field-div-error {
   border: 0.1rem solid red;
 }
 
@@ -76,6 +75,11 @@
   justify-content: center;
   grid-column: 1 / span 2;
   margin: 0 auto;
+  display: grid;
+  grid-template-rows: 1fr 2fr;
+  height: 9rem;
+  /* width: 22rem; */
+  gap: 2rem;
 }
 
 .auth-form-submit-btn {
@@ -94,7 +98,14 @@
   color: white;
 }
 
+/* Error */
 
+.error {
+  font-size: 1.2rem;
+  line-height: 1.56rem;
+  text-align: center;
+  color: #FF0E0E;
+}
 
 /* Checkmark */
 
@@ -168,14 +179,13 @@
   border-color: #e12b2b transparent transparent transparent;
 }
 
-#username:hover + .error-tooltip{
+#username:hover + .error-tooltip {
   visibility: visible;
 }
 
-#password:hover + .error-tooltip{
+#password:hover + .error-tooltip {
   visibility: visible;
 }
-
 
 /* Password tooltip */
 .password-input-field {

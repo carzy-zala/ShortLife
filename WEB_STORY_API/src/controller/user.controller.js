@@ -188,7 +188,7 @@ const ownStories = asyncHandler(async (req, res) => {
   const stories = await Story.find({ createdBy: _id });
 
   const slides = stories.map(async (story) => {
-    return await Slide.findOne({storyId : story._id});
+    return await Slide.findOne({ storyId: story._id });
   });
 
   const storyWithSlide = await Promise.all(slides);
@@ -206,4 +206,16 @@ const ownStories = asyncHandler(async (req, res) => {
 
 //#endregion
 
-export { isUsernameExist, register, login, bookmark, addBookmark, ownStories };
+//#region userlike array
+
+const likes = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+
+  const like = await User.findById(_id).select("like")
+
+
+
+  res.status(200).json(new ApiResponse(200,{like:like.like},"Likes fetched successfully !"))
+});
+
+export { isUsernameExist, register, login, bookmark, addBookmark, ownStories ,likes};

@@ -18,7 +18,7 @@ function Navbar() {
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
 
-  const nevigate = useNavigate();
+  const navigate = useNavigate();
 
   const [isRegisterClick, setIsRegisterClick] = useState(false);
   const [isLoginClick, setIsLoginClick] = useState(false);
@@ -30,6 +30,7 @@ function Navbar() {
     setToken();
     persistor.purge();
     dispatch(reset());
+    navigate("/")
   };
 
   return (
@@ -64,7 +65,7 @@ function Navbar() {
             <Button
               className="nav-header-btn nav-header-bookmark-btn"
               style={{ backgroundColor: "#FF7373" }}
-              onClick={() => {nevigate("/bookmark")}}
+              onClick={() => {navigate("/bookmark")}}
             >
               <FontAwesomeIcon icon={faBookmark} />
               Bookmarks

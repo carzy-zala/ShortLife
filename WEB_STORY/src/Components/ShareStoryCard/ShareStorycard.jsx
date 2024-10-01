@@ -19,7 +19,10 @@ function ShareStoryCard() {
 
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [currentSlide, setCurrentSlide] = useState(slideIndex);
+  const [currentSlide, setCurrentSlide] = useState(parseInt(slideIndex));
+  const [currentSlideLoader, setCurrentSlideLoader] = useState(
+    parseInt(slideIndex)
+  );
 
   const [isShareClick, setIsShareClick] = useState(false);
   const [slides, setSlides] = useState([]);
@@ -50,6 +53,9 @@ function ShareStoryCard() {
 
   setTimeout(() => {
     if (currentSlide < slides.length - 1) setCurrentSlide(currentSlide + 1);
+    if (currentSlideLoader !== slides.length) {
+      setCurrentSlideLoader(currentSlideLoader + 1);
+    }
   }, 15000);
 
   return (
@@ -60,14 +66,13 @@ function ShareStoryCard() {
             <Button
               className="sharestorycard-arraow-btns"
               onClick={() => {
-                if (currentSlide) setCurrentSlide(currentSlide - 1);
+                if (currentSlide) {
+                  setCurrentSlide(currentSlide - 1);
+                  setCurrentSlideLoader(currentSlide - 1);
+                }
               }}
             >
-              <FontAwesomeIcon
-                icon={faLessThan}
-                size="2xl"
-                style={{ color: "#fff" }}
-              />
+              <img src="/src/assets/leftArrow.svg" />
             </Button>
           </div>
 
@@ -87,9 +92,11 @@ function ShareStoryCard() {
                     <div
                       key={slide._id}
                       className={`loader-line ${
-                        index < currentSlide && "loader-line-completed"
+                        index < currentSlideLoader && "loader-line-completed"
                       }
-                     ${currentSlide === index && "loader-line-transition"}`}
+                     ${
+                       currentSlideLoader === index && "loader-line-transition"
+                     }`}
                     ></div>
                   );
                 })}
@@ -172,14 +179,11 @@ function ShareStoryCard() {
               onClick={() => {
                 if (currentSlide < slides.length - 1) {
                   setCurrentSlide(currentSlide + 1);
+                  setCurrentSlideLoader(currentSlideLoader + 1);
                 }
               }}
             >
-              <FontAwesomeIcon
-                icon={faGreaterThan}
-                size="2xl"
-                style={{ color: "#fff" }}
-              />
+              <img src="/src/assets/rightArrow.svg" />
             </Button>
           </div>
         </div>

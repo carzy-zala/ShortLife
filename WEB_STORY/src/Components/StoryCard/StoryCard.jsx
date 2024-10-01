@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./StoryCard.css";
 import { Button, ShowStoryCard } from "../../Components";
 import { createPortal } from "react-dom";
+import AddStory from "../../pages/Admin/AddStory/AddStory";
 
 function StoryCard({
   url,
@@ -13,6 +14,7 @@ function StoryCard({
   isLogin = false,
 }) {
   const [storyClick, setIsStoryClick] = useState(false);
+  const [isEditClick, setIsEditClick] = useState(false);
 
   return (
     <div>
@@ -48,7 +50,7 @@ function StoryCard({
               }
               className="storycard-edit-btn"
               onClick={() => {
-                console.log("click edit");
+                setIsEditClick(true);
               }}
             />
           </div>
@@ -57,10 +59,15 @@ function StoryCard({
       {storyClick &&
         createPortal(
           <div className="portal-div">
-            <ShowStoryCard
-              storyId={storyId}
-              cancelHandle={setIsStoryClick}
-            />
+            <ShowStoryCard storyId={storyId} cancelHandle={setIsStoryClick} />
+          </div>,
+          document.body
+        )}
+
+      {isEditClick &&
+        createPortal(
+          <div className="portal-div">
+            <AddStory cancelHandle={setIsEditClick} isEdit={true} storyId={storyId}/>
           </div>,
           document.body
         )}

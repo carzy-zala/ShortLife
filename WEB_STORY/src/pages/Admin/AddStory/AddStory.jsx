@@ -1,37 +1,69 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { Button, Input, Select } from "../../../Components";
+import { Button, Input } from "../../../Components";
 import "./AddStory.css";
 import { toast } from "react-toastify";
+import { axiosGet } from "../../../services/axios.config";
+import { apiRoutes } from "../../../services/apiRoutes";
+import { useSelector } from "react-redux";
 
-function AddStory({ cancelHandle }) {
-  const { register, handleSubmit, control } = useForm({
-    defaultValues: {
-      category: "",
-      slides: [
-        {
-          heading: "",
-          description: "",
-          url: "",
-        },
-        {
-          heading: "",
-          description: "",
-          url: "",
-        },
-        {
-          heading: "",
-          description: "",
-          url: "",
-        },
-        {
-          heading: "",
-          description: "",
-          url: "",
-        },
-      ],
-    },
+function AddStory({ cancelHandle, isEdit = false, storyId = "" }) {
+  const [intialState, setIntialState] = useState({
+    category: "",
+    slides: [
+      {
+        heading: "",
+        description: "",
+        url: "",
+      },
+      {
+        heading: "",
+        description: "",
+        url: "",
+      },
+      {
+        heading: "",
+        description: "",
+        url: "",
+      },
+      {
+        heading: "",
+        description: "",
+        url: "",
+      },
+    ],
   });
+
+  const { register, handleSubmit, control, reset, watch } = useForm({
+    defaultValues: intialState,
+  });
+
+  useEffect(() => {
+    if (isEdit) {
+      (async () =>
+        await axiosGet(
+          `${import.meta.env.VITE_HOST_API_URL}${apiRoutes.STORY}`.replace(
+            ":storyId",
+            storyId
+          )
+        ).then((response) => {
+          const { category, slides } = response.data;
+
+          setIntialState({ category, slides });
+          reset({ category, slides });
+        }))();
+    }
+  }, [setIntialState]);
+
+  const [_, ...allOptions] = useSelector(
+    (store) => store.categories.categories
+  );
+
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    setOptions([{ text: "Select Category" }, ...allOptions]);
+  }, [setOptions]);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -57,7 +89,15 @@ function AddStory({ cancelHandle }) {
     });
   };
 
-  const isSlideDataValid = (slides) => {
+  const isSlideDataValid = (data) => {
+    const { category, slides } = data;
+
+    if (!category || category === "Select Category") {
+      toast.error(`Please elect one category among the provided category !`);
+      setIsLoading(false);
+      return false;
+    }
+
     for (let i = 0; i < slides.length; i++) {
       if (!slides[i].heading || slides[i].heading.trim() === "") {
         toast.error(`Please enter heading of slide in ${i + 1} slide`);
@@ -75,22 +115,73 @@ function AddStory({ cancelHandle }) {
         toast.error(`Please enter url of slide in ${i + 1} slide`);
         setIsLoading(false);
         return false;
+      } else {
+        if (!handleURLValidation(slides[i].url, i)) {
+          return false;
+        }
       }
     }
 
     return true;
   };
 
+  const handleURLValidation = (url, i) => {
+    let flag = true;
+    fetch(url, { method: "HEAD" })
+      .then((response) => {
+        const contentType = response.headers.get("Content-Type");
+
+        if (
+          contentType.startsWith("image/") ||
+          contentType.startsWith("video/")
+        ) {
+          if (contentType.startsWith("video/")) {
+            const videoElement = document.createElement("video");
+            videoElement.src = url;
+
+            videoElement.onloadedmetadata = () => {
+              const duration = Math.floor(videoElement.duration);
+
+              if (duration > 16) {
+                flag = false;
+                toast.error(
+                  `Please make sure video is less than 15 sec in ${
+                    i + 1
+                  } slide !`
+                );
+              }
+            };
+          }
+        } else {
+          flag = false;
+          toast.error(
+            `Please enter either image link or video link in ${i + 1} slide !`
+          );
+        }
+      })
+      .catch((error) => {
+        toast.error("Please enter valid link");
+        flag = false;
+      });
+
+    return flag;
+  };
+
   const handlePostStory = (data) => {
     // handling error
 
     if (!isLoading) {
-      const { slides } = data;
       setIsLoading(true);
 
-      if (isSlideDataValid(slides)) {
-        console.log(data);
+      if (isSlideDataValid(data)) {
+        if (isEdit) {
+          console.log(data);
+        } else {
+          console.log(data);
+        }
       }
+      setIsLoading(false);
+      // cancelHandle(false);
     }
   };
 
@@ -173,7 +264,21 @@ function AddStory({ cancelHandle }) {
               {...register(`slides.${currentSlide}.url`)}
             />
             <label className="addstory-story-form-label">Category :</label>
-            <Select />
+            <select
+              {...register("category")}
+              className="select-drop-down-box"
+              defaultValue="Food"
+            >
+              {options.map((option) => (
+                <option
+                  key={option.text}
+                  value={option.text}
+                  className="option"
+                >
+                  {option.text}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="addstory-story-btns">

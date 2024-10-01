@@ -8,7 +8,7 @@ import { apiRoutes } from "../../services/apiRoutes";
 import { toast } from "react-toastify";
 import { axiosGet, axiosPost } from "../../services/axios.config";
 import { useDispatch } from "react-redux";
-import { login,fetchOwnStories } from "../../feature/useSlice";
+import { login, fetchOwnStories } from "../../feature/useSlice";
 import setToken from "../../utils/setToken";
 import axios from "axios";
 
@@ -25,6 +25,7 @@ function Auth({ title, cancelHandel }) {
   const [isShow, setIsShow] = useState(false);
   const [isUsernameVerified, setIsUsernameVerified] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleShowPassword = () => {
     setIsShow(!isShow);
@@ -70,6 +71,7 @@ function Auth({ title, cancelHandel }) {
       cancelHandel(false);
       toast.success(response.message);
     } else {
+      setError(response.message)
       toast.error(response.message);
     }
   };
@@ -85,6 +87,7 @@ function Auth({ title, cancelHandel }) {
       cancelHandel(false);
       toast.success(response.message);
     } else {
+      setError(response.message)
       toast.error(response.message);
     }
   };
@@ -115,16 +118,19 @@ function Auth({ title, cancelHandel }) {
   };
 
   const handleAuthFormSubmitError = (error) => {
-    console.log(error);
-
     if (title === "Register") {
       toast.error(
         (error.username && error.username.message) || error.password.message
       );
+      setError(
+        (error.username && error.username.message) || error.password.message
+      );
     } else {
+      setError("Invalide credentials")
       toast.error("Invalid credentials");
     }
   };
+
   useEffect(() => {
     if (
       title === "Register" &&
@@ -249,6 +255,7 @@ function Auth({ title, cancelHandel }) {
                 )}
               </div>
             </div>
+
             <label className="auth-label">Password</label>
             <div
               className={`auth-input-field-div
@@ -331,19 +338,26 @@ function Auth({ title, cancelHandel }) {
             </div>
 
             <div className="auth-form-submit-btn-div">
-              <Button
-                type="submit"
-                className="auth-form-submit-btn"
-                children={
-                  !isLoading ? (
-                    title
-                  ) : (
-                    <div style={{ display: "grid", justifyContent: "center" }}>
-                      <Loader backgroundColor="white" />
-                    </div>
-                  )
-                }
-              />
+              {error ? <div className="error">{error}</div> :<div></div>}
+              
+              <div style={{width:"100%",display:"grid",justifyContent:"center"}}>
+                <Button
+                  type="submit"
+                  className="auth-form-submit-btn"
+                  children={
+                    !isLoading ? (
+                      title
+                    ) : (
+                      <div
+                        style={{ display: "grid", justifyContent: "center" }}
+                      >
+                        <Loader backgroundColor="white" />
+                      </div>
+                    )
+                  }
+                />
+              </div>
+
             </div>
           </div>
         </form>

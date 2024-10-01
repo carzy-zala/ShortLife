@@ -15,6 +15,12 @@ function Home() {
 
   const [currentFilter, setCurrentFilter] = useState(0);
 
+  const [visibleReel, setVisibleReel] = useState(4);
+
+  const handleShowMore = () => {
+    setVisibleReel(visibleReel + 4);
+  };
+
   return (
     <div className="home-main-div">
       <div className="home-webstory-category">
@@ -26,20 +32,18 @@ function Home() {
           <div className="home-webstory-stories-title">Your stories</div>
 
           <div className="home-webstory-stories">
-            {ownstories.map((story, index) => {
+            {ownstories.slice(0, visibleReel).map((story, index) => {
               return (
-                index < 4 && (
-                  <StoryCard
-                    storyId={story.storyId}
-                    key={story._id}
-                    url={story.url}
-                    heading={story.heading}
-                    description={story.description}
-                    isImage={true}
-                    isVideo={story.isVideo}
-                    isLogin={true}
-                  />
-                )
+                <StoryCard
+                  storyId={story.storyId}
+                  key={story._id}
+                  url={story.url}
+                  heading={story.heading}
+                  description={story.description}
+                  isImage={true}
+                  isVideo={story.isVideo}
+                  isLogin={true}
+                />
               );
             })}
           </div>
@@ -49,6 +53,7 @@ function Home() {
               <Button
                 className="home-webstory-stories-more"
                 children="See more"
+                onClick={handleShowMore}
               />
             )}
           </div>
@@ -58,7 +63,10 @@ function Home() {
       {stories.length &&
         stories.map((story, index) => {
           return (
-            <div className="home-webstory-stories-detail">
+            <div
+              className="home-webstory-stories-detail"
+              key={`${story._id}.${story.category}`}
+            >
               <div className="home-webstory-stories-title">
                 Top Stories About {`${story.category}`}
               </div>
@@ -69,7 +77,7 @@ function Home() {
                     index < 4 && (
                       <StoryCard
                         storyId={story.storyId}
-                        key={slide._id}
+                        key={`${slide._id}.${index}`}
                         url={slide.url}
                         heading={slide.heading}
                         description={slide.description}

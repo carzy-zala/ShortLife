@@ -9,12 +9,19 @@ const initialState = {
   username: "",
   avatar: "",
   ownstories: [],
+  like: [],
 };
 
 export const fetchOwnStories = createAsyncThunk("user/fetchOwnStories", () => {
   return axiosGet(
     `${import.meta.env.VITE_HOST_API_URL}${apiRoutes.OWN_STORIES}`
   ).then((response) => response.data.slides);
+});
+
+export const likes = createAsyncThunk("user/likes", () => {
+  return axiosGet(`${import.meta.env.VITE_HOST_API_URL}${apiRoutes.LIKES}`).then(
+    (response) => response.data.like
+  );
 });
 
 const userReducer = createSlice({
@@ -34,6 +41,7 @@ const userReducer = createSlice({
       const { username, avatar, like } = action.payload.user;
       state.username = username;
       state.avatar = avatar || "";
+      state.like = like || [];
     },
     reset: (state) => {
       state = { ...initialState };
@@ -42,6 +50,9 @@ const userReducer = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchOwnStories.fulfilled, (state, action) => {
       state.ownstories = action.payload;
+    });
+    builder.addCase(likes.fulfilled, (state, action) => {            
+      state.like = action.payload;
     });
   },
 });

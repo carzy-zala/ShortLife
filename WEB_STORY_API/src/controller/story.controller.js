@@ -119,13 +119,22 @@ const allStories = asyncHandler(async (req, res) => {
 const story = asyncHandler(async (req, res) => {
   const { storyId } = req.params;
 
-
   const slides = await Slide.find({ storyId: storyId }).sort({ _id: -1 });
+
+  const story = await Story.findById(storyId);
+
+  const category = await Category.findById(story.category);
 
 
   res
     .status(200)
-    .json(new ApiResponse(200, { slides }, "Story fetched succesfully !"));
+    .json(
+      new ApiResponse(
+        200,
+        { category: category.text, slides },
+        "Story fetched succesfully !"
+      )
+    );
 });
 
 export { addStory, categoryStories, allStories, story };
