@@ -131,7 +131,7 @@
   display: grid;
   grid-template-columns: auto auto auto;
   padding-top: 1.5rem;
-  gap: 7rem;
+  gap: 5rem;
 }
 
 .showstorycard-lower-btns {
