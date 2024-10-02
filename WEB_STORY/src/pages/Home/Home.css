@@ -44,6 +44,8 @@
 
 .home-webstory-stories-more-div {
   justify-self: center;
+  padding-bottom: 1rem;
+
 }
 
 .home-webstory-stories-more {
@@ -56,7 +58,6 @@
   text-align: center;
   color: #fff;
   background: #ff7373;
-  padding-bottom: 1rem;
 }
 
 @media screen and (min-width: 300px) and (max-width: 770px) {
