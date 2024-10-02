@@ -4,6 +4,7 @@ import { Button } from "../../Components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBookmark,
+  faDownload,
   faGreaterThan,
   faHeart,
   faLessThan,
@@ -12,10 +13,16 @@ import {
 import { axiosGet } from "../../services/axios.config";
 import { apiRoutes } from "../../services/apiRoutes";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function ShareStoryCard() {
+
+  const isAuthenticated = useSelector(store => store.user.isAuthenticated)
+
   const navigate = useNavigate();
   const { storyId, slideIndex } = useParams();
+  const [isDownloaded, setIsDownloaded] = useState({});
+
 
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -38,6 +45,32 @@ function ShareStoryCard() {
         setSlides(response.data.slides);
       }))();
   }, []);
+
+
+  const downloadFile = async (fileURL) => {
+    try {
+      const response = await fetch(fileURL);
+      const blob = await response.blob();
+
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+
+      reader.onloadend = () => {
+        const base64data = reader.result;
+
+        const link = document.createElement("a");
+        link.href = base64data;
+        link.download = `slide${currentSlide}`;
+        link.click();
+        setIsDownloaded((prev) => ({
+          ...prev,
+          [currentSlide]: true,
+        }));
+      };
+    } catch (error) {
+      toast.error("Failed to download file");
+    }
+  };
 
   const handleShare = (slideIndex) => {
     setIsShareClick(true);
@@ -62,7 +95,7 @@ function ShareStoryCard() {
     slides.length && (
       <div className="portal-div">
         <div key={slides[currentSlide]._id} className="sharestorycard-main-div">
-          <div>
+          <div className="share-story-arro-btns-mobile">
             <Button
               className="sharestorycard-arraow-btns"
               onClick={() => {
@@ -156,6 +189,32 @@ function ShareStoryCard() {
                     />
                   </Button>
                 </div>
+
+                <div className="download-btn" style={{ color: "#fff" }}>
+                  <Button
+                    className={`showstorycard-lower-btns `}
+                    style={{ paddingLeft: "2rem" }}
+                    onClick={() => {
+                      if (isAuthenticated) {
+                        (async () =>
+                          await downloadFile(slides[currentSlide].url))();
+                      } else setIsLoginShow(true);
+                    }}
+                  >
+                    {isDownloaded[currentSlide] ? (
+                      <img
+                        src="/assets/download_done.svg"
+                        height="26px"
+                        width="26px"
+                      />
+                    ) : (
+                      <a>
+                        <FontAwesomeIcon icon={faDownload} size="2xl" />
+                      </a>
+                    )}
+                  </Button>
+                </div>
+
                 <div>
                   <Button
                     className={`sharestorycard-lower-btns sharestorycard-like-btn  `}
@@ -173,7 +232,7 @@ function ShareStoryCard() {
             </div>
           </div>
 
-          <div>
+          <div className="share-story-arro-btns-mobile right-arrow">
             <Button
               className="sharestorycard-arraow-btns"
               onClick={() => {
