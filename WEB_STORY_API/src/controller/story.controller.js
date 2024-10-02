@@ -64,24 +64,38 @@ const updateStory = asyncHandler(async (req, res) => {
     { new: true }
   );
 
-  await Slide.deleteMany({ storyId: storyId });
   // slide update
 
   slides.map(async (slide) => {
-    const { heading, description, url } = slide;
-    const slideCreate = await Slide.create({
-      storyId,
-      heading,
-      description,
-      url,
-    });
+    const { heading, description, url,  _id } = slide;
 
-    if (!slideCreate) {
-      throw new ApiError(
-        500,
-        "ERROR :: Internal error while creating your slide !"
+
+    if (_id) {
+      
+      console.log("old");
+      
+
+      await Slide.findByIdAndUpdate(
+        _id,
+        {
+          heading: heading,
+          description: description,
+          url: url,
+        },
+        { new: true }
       );
+    } else {
+      console.log("new");
+      
+       const slideCreate = await Slide.create({
+        storyId,
+        heading,
+        description,
+        url,
+      });
     }
+
+    
   });
 
   return res
@@ -100,11 +114,7 @@ const categoryStories = asyncHandler(async (req, res) => {
 
   const page = parseInt(req.query.page) || 1;
 
-  
-
   const skip = (page - 1) * 12;
-
-  
 
   const storiesId = await Story.find({ category: categoryId })
     .select("_id")

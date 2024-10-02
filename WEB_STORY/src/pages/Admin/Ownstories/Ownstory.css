@@ -16,3 +16,12 @@
  gap: 4rem;
  flex-wrap: wrap;
 }
+
+@media screen and (min-width:426px)  {
+
+  .ownstory-webstory-main-div {
+    
+    padding: 5rem;
+  }
+  
+}

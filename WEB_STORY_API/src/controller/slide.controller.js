@@ -41,7 +41,7 @@ const removeLike = asyncHandler(async (req, res) => {
 
   await User.findByIdAndUpdate(
     _id,
-    { $pull: { like: { $in: [ slideId ] } } },
+    { $pull: { like: { $in: [slideId] } } },
     { new: true, useFindAndModify: false }
   );
 
@@ -54,4 +54,12 @@ const removeLike = asyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, {}, "Like decrease succesfully ."));
 });
 
-export { likeCount, addLike, removeLike };
+const deleteSlide = asyncHandler(async (req, res) => {
+  const { slideId } = req.params;
+
+  await Slide.findByIdAndDelete(slideId);
+
+  res.status(200).json(new ApiResponse(200, {}, "deleted succesfully"));
+});
+
+export { likeCount, addLike, removeLike ,deleteSlide};

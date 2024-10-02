@@ -4,14 +4,20 @@ import { Button, Input } from "../../../Components";
 import "./AddStory.css";
 import { toast } from "react-toastify";
 import {
+  axiosDelete,
   axiosGet,
   axiosPatch,
   axiosPost,
 } from "../../../services/axios.config";
 import { apiRoutes } from "../../../services/apiRoutes";
 import { useSelector } from "react-redux";
+import MediaQuery from "react-responsive";
 
 function AddStory({ cancelHandle, isEdit = false, storyId = "" }) {
+
+  const [deleteArray, setDeleteArray] = useState([]);
+
+
   const [intialState, setIntialState] = useState({
     category: "",
     slides: [
@@ -57,7 +63,7 @@ function AddStory({ cancelHandle, isEdit = false, storyId = "" }) {
           reset({ category, slides });
         }))();
     }
-  }, [setIntialState]);
+  }, [setIntialState, setDeleteArray]);
 
   const [_, ...allOptions] = useSelector(
     (store) => store.categories.categories
@@ -77,8 +83,14 @@ function AddStory({ cancelHandle, isEdit = false, storyId = "" }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
+
   const handleDeleteSlide = (index) => {
-    remove(index);
+    if (isEdit) {
+      setDeleteArray((prev) => [...prev, fields[index]._id]);
+      remove(index);
+    } else {
+      remove(index);
+    }
   };
 
   const handleChangeSlide = (index) => {
@@ -172,6 +184,20 @@ function AddStory({ cancelHandle, isEdit = false, storyId = "" }) {
   };
 
   const handleEditStory = (data) => {
+    if (deleteArray.length) {
+      (async () => {
+        const deleteArrayAll = deleteArray.map(async (id) => {
+          await axiosDelete(
+            `${import.meta.env.VITE_HOST_API_URL}${
+              apiRoutes.DELETE_SLIDE
+            }`.replace(":slideId", id)
+          ).then((response) => response);
+        });
+
+        const all = await Promise.all(deleteArrayAll);
+      })();
+    }
+
     (async () => {
       const storyURL = `${import.meta.env.VITE_HOST_API_URL}${
         apiRoutes.EDIT_STORY
@@ -223,147 +249,18 @@ function AddStory({ cancelHandle, isEdit = false, storyId = "" }) {
 
   return (
     <div>
-      <div className="addstory-story-main-div">
-        <div className="addstory-story-div-cancel">
-          <Button
-            className="addstory-story-div-cancel-btn"
-            onClick={() => cancelHandle(false)}
-          >
-            <img src="/assets/slideCancel.svg" height="25px" width="25px" />
-          </Button>
-        </div>
-        <div className="addstory-story-no-information">Add upto 6 slides</div>
-
-        <div className="addstory-story-cards">
-          {fields.map((_, index) => {
-            return (
-              <div
-                key={index}
-                className={`addstory-story-card ${
-                  currentSlide === index && "addstory-story-card-selected"
-                }`}
-              >
-                <Button
-                  children={`Slide ${index + 1}`}
-                  className="addstory-story-slide-btn"
-                  onClick={() => handleChangeSlide(index)}
-                />
-                {index > 2 && (
-                  <Button
-                    className="addstory-story-slide-cancel-btn"
-                    onClick={() => handleDeleteSlide(index)}
-                  >
-                    <img
-                      src="/assets/slideCancel.svg"
-                      className="addstory-story-slid-cancel-img"
-                    />
-                  </Button>
-                )}
-              </div>
-            );
-          })}
-
-          {fields.length < 6 && (
-            <div className={`addstory-story-card`} onClick={handleAddSlide}>
-              <Button children="Add +" className="addstory-story-slide-btn" />
-            </div>
-          )}
-        </div>
-
-        <form onSubmit={handleSubmit(handlePostStory)}>
-          <div className="addstory-story-form-div">
-            <div className="addstory-story-form">
-              <label className="addstory-story-form-label">Heading :</label>
-              <Input
-                key={`slides.${currentSlide}.heading`}
-                className="addstory-story-form-input"
-                placeholder="Your Heading"
-                {...register(`slides.${currentSlide}.heading`)}
-              />
-              <label className="addstory-story-form-label">Description :</label>
-
-              <textarea
-                key={`slides.${currentSlide}.description`}
-                name="postContent"
-                rows={4}
-                cols={40}
-                className="addstory-story-form-input addstory-story-form-input-description"
-                placeholder="Story Description"
-                {...register(`slides.${currentSlide}.description`)}
-              />
-              <label className="addstory-story-form-label">
-                Image/Video Link :
-              </label>
-              <Input
-                key={`slides.${currentSlide}.url`}
-                className="addstory-story-form-input"
-                placeholder="Add Image or Video Link"
-                {...register(`slides.${currentSlide}.url`)}
-              />
-              <label className="addstory-story-form-label">Category :</label>
-              <select
-                {...register("category")}
-                className="select-drop-down-box"
-                defaultValue="Food"
-              >
-                {options.map((option) => (
-                  <option
-                    key={option.text}
-                    value={option.text}
-                    className="option"
-                  >
-                    {option.text}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="addstory-story-btns">
-              <div className="addstory-story-navigation-btns">
-                <div>
-                  <Button
-                    children="Previous"
-                    className="addstory-story-navigation-btn addstory-story-navigation-prev-btn"
-                    onClick={() =>
-                      setCurrentSlide((prev) => (prev > 0 ? prev - 1 : 0))
-                    }
-                  />
-                </div>
-                <div>
-                  <Button
-                    children="Next"
-                    className="addstory-story-navigation-btn addstory-story-navigation-next-btn"
-                    onClick={() =>
-                      setCurrentSlide((prev) =>
-                        prev < fields.length - 1 ? prev + 1 : prev
-                      )
-                    }
-                  />
-                </div>
-              </div>
-              <div className="addstory-story-create-btn">
-                <Button
-                  children="Post"
-                  className="addstory-story-navigation-btn addstory-story-navigation-post-btn"
-                  type="submit"
-                />
-              </div>
-            </div>
+      <MediaQuery minWidth="769px">
+        <div className="addstory-story-main-div">
+          <div className="addstory-story-div-cancel">
+            <Button
+              className="addstory-story-div-cancel-btn"
+              onClick={() => cancelHandle(false)}
+            >
+              <img src="/assets/slideCancel.svg" height="25px" width="25px" />
+            </Button>
           </div>
-        </form>
-      </div>
+          <div className="addstory-story-no-information">Add upto 6 slides</div>
 
-      <div className="addstory-story-main-mobile-div">
-        <div className="addstory-story-div-cancel">
-          <Button
-            className="addstory-story-div-cancel-btn"
-            onClick={() => cancelHandle(false)}
-          >
-            <img src="/assets/slideCancel.svg" height="25px" width="25px" />
-          </Button>
-        </div>
-
-        <div className="addstory-story-inner-mobile-div-grid">
           <div className="addstory-story-cards">
             {fields.map((_, index) => {
               return (
@@ -401,63 +298,53 @@ function AddStory({ cancelHandle, isEdit = false, storyId = "" }) {
           </div>
 
           <form onSubmit={handleSubmit(handlePostStory)}>
-            <div className="addstory-story-mobile-form-div">
+            <div className="addstory-story-form-div">
               <div className="addstory-story-form">
-                <div className="addstory-form-inner-fields-grid">
-                  <label className="addstory-story-form-label">Heading :</label>
-                  <Input
-                    key={`slides.${currentSlide}.heading`}
-                    className="addstory-story-form-input"
-                    placeholder="Your Heading"
-                    {...register(`slides.${currentSlide}.heading`)}
-                  />
-                </div>
-                <div className="addstory-form-inner-fields-grid">
-                  <label className="addstory-story-form-label">
-                    Description :
-                  </label>
+                <label className="addstory-story-form-label">Heading :</label>
+                <Input
+                  key={`slides.${currentSlide}.heading`}
+                  className="addstory-story-form-input"
+                  placeholder="Your Heading"
+                  {...register(`slides.${currentSlide}.heading`)}
+                />
+                <label className="addstory-story-form-label">
+                  Description :
+                </label>
 
-                  <textarea
-                    key={`slides.${currentSlide}.description`}
-                    name="postContent"
-                    rows={4}
-                    cols={40}
-                    className="addstory-story-form-input addstory-story-form-input-description"
-                    placeholder="Story Description"
-                    {...register(`slides.${currentSlide}.description`)}
-                  />
-                </div>
-                <div className="addstory-form-inner-fields-grid">
-                  <label className="addstory-story-form-label">
-                    Image & Video :
-                  </label>
-                  <Input
-                    key={`slides.${currentSlide}.url`}
-                    className="addstory-story-form-input"
-                    placeholder="Add Image or Video Link"
-                    {...register(`slides.${currentSlide}.url`)}
-                  />
-                </div>
-                <div className="addstory-form-inner-fields-grid">
-                  <label className="addstory-story-form-label">
-                    Category :
-                  </label>
-                  <select
-                    {...register("category")}
-                    className="select-drop-down-box"
-                    defaultValue="Food"
-                  >
-                    {options.map((option) => (
-                      <option
-                        key={option.text}
-                        value={option.text}
-                        className="option"
-                      >
-                        {option.text}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <textarea
+                  key={`slides.${currentSlide}.description`}
+                  name="postContent"
+                  rows={4}
+                  cols={40}
+                  className="addstory-story-form-input addstory-story-form-input-description"
+                  placeholder="Story Description"
+                  {...register(`slides.${currentSlide}.description`)}
+                />
+                <label className="addstory-story-form-label">
+                  Image/Video Link :
+                </label>
+                <Input
+                  key={`slides.${currentSlide}.url`}
+                  className="addstory-story-form-input"
+                  placeholder="Add Image or Video Link"
+                  {...register(`slides.${currentSlide}.url`)}
+                />
+                <label className="addstory-story-form-label">Category :</label>
+                <select
+                  {...register("category")}
+                  className="select-drop-down-box"
+                  defaultValue="Food"
+                >
+                  {options.map((option) => (
+                    <option
+                      key={option.text}
+                      value={option.text}
+                      className="option"
+                    >
+                      {option.text}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="addstory-story-btns">
@@ -494,7 +381,156 @@ function AddStory({ cancelHandle, isEdit = false, storyId = "" }) {
             </div>
           </form>
         </div>
-      </div>
+      </MediaQuery>
+      <MediaQuery maxWidth="768px">
+        <div className="addstory-story-main-mobile-div">
+          <div className="addstory-story-div-cancel">
+            <Button
+              className="addstory-story-div-cancel-btn"
+              onClick={() => cancelHandle(false)}
+            >
+              <img src="/assets/slideCancel.svg" height="25px" width="25px" />
+            </Button>
+          </div>
+
+          <div className="addstory-story-inner-mobile-div-grid">
+            <div className="addstory-story-cards">
+              {fields.map((_, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={`addstory-story-card ${
+                      currentSlide === index && "addstory-story-card-selected"
+                    }`}
+                  >
+                    <Button
+                      children={`Slide ${index + 1}`}
+                      className="addstory-story-slide-btn"
+                      onClick={() => handleChangeSlide(index)}
+                    />
+                    {index > 2 && (
+                      <Button
+                        className="addstory-story-slide-cancel-btn"
+                        onClick={() => handleDeleteSlide(index)}
+                      >
+                        <img
+                          src="/assets/slideCancel.svg"
+                          className="addstory-story-slid-cancel-img"
+                        />
+                      </Button>
+                    )}
+                  </div>
+                );
+              })}
+
+              {fields.length < 6 && (
+                <div className={`addstory-story-card`} onClick={handleAddSlide}>
+                  <Button
+                    children="Add +"
+                    className="addstory-story-slide-btn"
+                  />
+                </div>
+              )}
+            </div>
+
+            <form onSubmit={handleSubmit(handlePostStory)}>
+              <div className="addstory-story-mobile-form-div">
+                <div className="addstory-story-form">
+                  <div className="addstory-form-inner-fields-grid">
+                    <label className="addstory-story-form-label">
+                      Heading :
+                    </label>
+                    <Input
+                      key={`slides.${currentSlide}.heading`}
+                      className="addstory-story-form-input"
+                      placeholder="Your Heading"
+                      {...register(`slides.${currentSlide}.heading`)}
+                    />
+                  </div>
+                  <div className="addstory-form-inner-fields-grid">
+                    <label className="addstory-story-form-label">
+                      Description :
+                    </label>
+
+                    <textarea
+                      key={`slides.${currentSlide}.description`}
+                      name="postContent"
+                      rows={4}
+                      cols={40}
+                      className="addstory-story-form-input addstory-story-form-input-description"
+                      placeholder="Story Description"
+                      {...register(`slides.${currentSlide}.description`)}
+                    />
+                  </div>
+                  <div className="addstory-form-inner-fields-grid">
+                    <label className="addstory-story-form-label">
+                      Image & Video :
+                    </label>
+                    <Input
+                      key={`slides.${currentSlide}.url`}
+                      className="addstory-story-form-input"
+                      placeholder="Add Image or Video Link"
+                      {...register(`slides.${currentSlide}.url`)}
+                    />
+                  </div>
+                  <div className="addstory-form-inner-fields-grid">
+                    <label className="addstory-story-form-label">
+                      Category :
+                    </label>
+                    <select
+                      {...register("category")}
+                      className="select-drop-down-box"
+                      defaultValue="Food"
+                    >
+                      {options.map((option) => (
+                        <option
+                          key={option.text}
+                          value={option.text}
+                          className="option"
+                        >
+                          {option.text}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="addstory-story-btns">
+                  <div className="addstory-story-navigation-btns">
+                    <div>
+                      <Button
+                        children="Previous"
+                        className="addstory-story-navigation-btn addstory-story-navigation-prev-btn"
+                        onClick={() =>
+                          setCurrentSlide((prev) => (prev > 0 ? prev - 1 : 0))
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Button
+                        children="Next"
+                        className="addstory-story-navigation-btn addstory-story-navigation-next-btn"
+                        onClick={() =>
+                          setCurrentSlide((prev) =>
+                            prev < fields.length - 1 ? prev + 1 : prev
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="addstory-story-create-btn">
+                    <Button
+                      children="Post"
+                      className="addstory-story-navigation-btn addstory-story-navigation-post-btn"
+                      type="submit"
+                    />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </MediaQuery>
     </div>
   );
 }

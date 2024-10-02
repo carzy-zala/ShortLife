@@ -28,6 +28,8 @@ const apiRoutes = {
 
   ADD_LIKE : "/slide/addLike/:slideId",
   REMOVE_LIKE : "/slide/removeLike/:slideId",
+  DELETE_SLIDE : "/slide/delete/:slideId",
+
 };
 
 export { apiRoutes };

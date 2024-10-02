@@ -183,15 +183,16 @@
 }
 
 .addstory-story-main-mobile-div {
-  display: none;
+  /* display: none; */
   border-radius: 2rem;
   background-color: #fff;
   box-shadow: 0px 0.4rem 3rem 0px #ffffff40;
   z-index: 999;
   height: 70%;
-  width: 100%;  
+  width: 100%;
   padding: 1rem;
 }
+
 
 @media screen and (min-width: 300px) and (max-width: 770px) {
   .addstory-story-main-div {
@@ -302,3 +303,5 @@
     line-height: 2.4rem;
   }
 }
+
+
