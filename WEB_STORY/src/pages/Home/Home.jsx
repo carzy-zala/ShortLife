@@ -96,19 +96,25 @@ function Home() {
               </div>
 
               <div className="home-webstory-stories">
-                {story.slides.slice(0, visible).map((slide, index) => {
-                  return (
-                    <StoryCard
-                      storyId={slide.storyId}
-                      key={`${slide._id}.${index}`}
-                      url={slide.url}
-                      heading={slide.heading}
-                      description={slide.description}
-                      isImage={true}
-                      isVideo={slide.isVideo}
-                    />
-                  );
-                })}
+                {story.slides.length ? (
+                  <div className="no-story">
+                    <span>No stories available</span>
+                  </div>
+                ) : (
+                  story.slides.slice(0, visible).map((slide, index) => {
+                    return (
+                      <StoryCard
+                        storyId={slide.storyId}
+                        key={`${slide._id}.${index}`}
+                        url={slide.url}
+                        heading={slide.heading}
+                        description={slide.description}
+                        isImage={true}
+                        isVideo={slide.isVideo}
+                      />
+                    );
+                  })
+                )}
               </div>
 
               <div
