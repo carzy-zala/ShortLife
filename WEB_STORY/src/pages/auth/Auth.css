@@ -221,3 +221,43 @@
   visibility: visible;
   opacity: 1;
 }
+
+
+@media screen and (min-width:300px) and (max-width:770px){
+
+  .auth-form-heading{
+    padding-bottom: 2rem;
+  }
+
+  .auth-form-grid {
+    display: flex;
+    flex-direction: column;
+    gap:0.5rem;
+  }
+
+  .auth-label{
+    align-self: flex-start;
+    padding-left: 2rem;
+  }
+
+  .auth-card{
+    width: 30rem;
+    height: 75%;
+    padding: 1rem;
+  }
+ 
+  
+  .auth-form-submit-btn-div{
+    gap: 1rem;
+    padding-top: 1rem;
+  }
+}
+
+@media screen and (min-width:376px) and (max-width:770px) {
+  .auth-card{
+    width: 110%;
+    height: 60%;
+    padding: 4rem;
+  }
+  
+}

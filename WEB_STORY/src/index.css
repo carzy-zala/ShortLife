@@ -47,8 +47,10 @@ body {
   position: fixed;
   top: 0;
   width: 100%;
-  display: block;
-  background-color: #fff;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  background-color: #000000e5;
   height: 100%;
   z-index: 1;
 }

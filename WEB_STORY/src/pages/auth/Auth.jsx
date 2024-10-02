@@ -150,7 +150,7 @@ function Auth({ title, cancelHandel }) {
           className="auth-form-cancel"
           onClick={() => cancelHandel(false)}
         >
-          <img src="src/assets/authCancel.svg" />
+          <img src="/assets/authCancel.svg" />
         </Button>
       </div>
 
