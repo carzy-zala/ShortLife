@@ -4,6 +4,7 @@ import Home from "../pages/Home/Home";
 import Bookmarks from "../pages/Admin/bookmark/Bookmarks";
 import { Category, ShowStoryCard } from "../Components";
 import ShareStoryCard from "../Components/ShareStoryCard/ShareStorycard";
+import Ownstory from "../pages/Admin/Ownstories/Ownstory";
 
 export const router = createBrowserRouter([
   {
@@ -19,9 +20,14 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "bookmark",
+        path: "/bookmark",
         element: <Bookmarks />,
       },
+      {
+        path: "/ownstories",
+        element: <Ownstory />,
+      },
+
       {
         path: "/:category",
         element: <Category />,

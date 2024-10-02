@@ -7,7 +7,8 @@ const initialState = {
   isAuthenticated: false,
   loading: true,
   username: "",
-  avatar: "",
+  avatar:
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-yi8lUjKNVqmWkbY2plqdttxFpzC2Efcq0g&s",
   ownstories: [],
   like: [],
   bookmark: [],
@@ -47,10 +48,9 @@ const userReducer = createSlice({
       state.isAuthenticated = true;
       const { username, avatar, like, bookmark } = action.payload.user;
       state.username = username;
-      state.avatar = avatar || "";
+      // state.avatar = avatar || "";
       state.like = like || [];
       state.bookmark = bookmark || [];
-      
     },
     reset: (state) => {
       state = { ...initialState };
@@ -63,7 +63,7 @@ const userReducer = createSlice({
     builder.addCase(likes.fulfilled, (state, action) => {
       state.like = action.payload;
     });
-    builder.addCase(bookmarks.fulfilled, (state, action) => {      
+    builder.addCase(bookmarks.fulfilled, (state, action) => {
       state.bookmark = action.payload;
     });
   },

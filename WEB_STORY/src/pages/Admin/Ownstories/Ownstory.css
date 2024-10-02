@@ -1,0 +1,18 @@
+.ownstory-webstory-main-div {
+  display: grid;
+  grid-template-rows: auto auto;
+  padding-top: 4rem;
+  gap: 4rem;
+}
+
+.ownstory-heading {
+  font-size: 3rem;
+  line-height: 3.9rem;
+  text-align: center;
+}
+
+.ownstory-webstory-stories{
+ display: flex;
+ gap: 4rem;
+ flex-wrap: wrap;
+}

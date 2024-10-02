@@ -7,7 +7,7 @@
   padding: 2rem 5rem;
   gap: 1rem;
   background-color: #fff;
-  box-shadow: 0px 0.4rem 3rem 0px #FFFFFF40;
+  box-shadow: 0px 0.4rem 3rem 0px #ffffff40;
   z-index: 999;
 }
 
@@ -36,6 +36,7 @@
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 1rem;
+  /* position: static; */
 }
 
 .addstory-story-card {
@@ -80,12 +81,11 @@
 
 /* Form */
 
-.addstory-story-form-div{
-    display: grid;
-    grid-template-rows: auto auto;
-    gap: 1rem;
+.addstory-story-form-div {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 1rem;
 }
-
 
 .addstory-story-form {
   display: grid;
@@ -110,13 +110,12 @@
   padding: 1rem;
 }
 
-.addstory-story-form-input-description{
-    height: 10.5rem;
+.addstory-story-form-input-description {
+  height: 10.5rem;
 }
 
-.addstory-story-form-input-description::placeholder{
-  
-}
+/* .addstory-story-form-input-description::placeholder {
+} */
 
 /* Buttons */
 
@@ -166,21 +165,140 @@
   background: #fe4f4f;
 }
 
-.addstory-story-create-btn{
-    justify-self: end;
+.addstory-story-create-btn {
+  justify-self: end;
 }
-
 
 /* Select */
 
 .select-drop-down-box {
-  width: 24.5rem;
+  width: 27rem;
   height: 3.5rem;
   border: 0.1rem solid #000;
-
 }
 
-.option{
-    padding: 10rem;
-    color: red;
+.option {
+  padding: 10rem;
+  color: red;
+}
+
+.addstory-story-main-mobile-div {
+  display: none;
+  border-radius: 2rem;
+  background-color: #fff;
+  box-shadow: 0px 0.4rem 3rem 0px #ffffff40;
+  z-index: 999;
+  height: 70%;
+  width: 100%;  
+  padding: 1rem;
+}
+
+@media screen and (min-width: 300px) and (max-width: 770px) {
+  .addstory-story-main-div {
+    display: none;
+  }
+
+  .addstory-story-main-mobile-div {
+    display: grid;
+    grid-template-rows: 1fr 15fr;
+    
+  }
+
+  .addstory-story-inner-mobile-div-grid {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 6rem;
+  }
+
+  .addstory-story-cards {
+    display: grid;
+    grid-template-columns: 0;
+    grid-template-rows: repeat(6, 1fr);
+    gap: 1rem;
+  }
+
+  .addstory-story-card {
+    width: 4rem;
+    height: 6rem;
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+
+  .addstory-story-slide-btn {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 1.3rem;
+    line-height: 2rem;
+    text-align: center;
+  }
+
+  .addstory-story-slide-cancel-btn {
+    top: 0;
+    right: -25%;
+  }
+
+  .addstory-story-mobile-form-div {
+    display: grid;
+    grid-template-rows: auto auto;
+    gap: 2rem;
+  }
+
+  .addstory-story-form {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+    row-gap: 1rem;
+    column-gap: 1rem;
+    align-items: center;
+    padding-top: 1rem;
+  }
+
+  .addstory-form-inner-fields-grid {
+    display: grid;
+    grid-template-rows: auto auto;
+  }
+
+  .addstory-story-form {
+    padding: 0;
+  }
+
+  .addstory-story-navigation-btn {
+    width: 7rem;
+    height: 3.5rem;
+    border-radius: 2rem;
+    outline: none;
+    border: none;
+    color: #fff;
+  }
+
+  .addstory-story-navigation-btns {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 1rem;
+    padding: 0;
+  }
+
+  .addstory-story-form-input {
+   width: 22rem;
+  }
+
+  .select-drop-down-box {
+    width: 22rem;
+  }
+
+  .addstory-story-create-btn {
+    justify-self: start;
+  }
+
+  .addstory-story-btns{
+    gap:0;
+  }
+
+  .addstory-story-form-label {
+    font-size: 1.4rem;
+    line-height: 2.4rem;
+  }
 }

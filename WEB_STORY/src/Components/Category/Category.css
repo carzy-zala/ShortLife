@@ -42,14 +42,18 @@
     padding: 0;
   }
   .category-webstory-stories-title {
-    visibility: hidden;
-    position: absolute;
+    /* visibility: hidden; */
+    /* position: absolute; */
+    padding-top: 2rem;
+    font-size: 3rem;
+    
   }
   .category-webstory-category {
     padding: 2rem;
   }
   .category-webstory-stories-detail {
-    gap: 0;
+    padding-top: 0;
+    gap: 2rem;
   }
 
   .category-webstory-stories-owntories {

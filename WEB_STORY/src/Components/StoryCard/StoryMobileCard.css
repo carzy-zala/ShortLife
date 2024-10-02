@@ -50,7 +50,7 @@
   }
 
   .storycard-edit-bottom {
-    padding: 4rem 1.5rem;
+    padding: 0 1.5rem 6rem 1.5rem;
   }
 
   .heading {
@@ -70,7 +70,7 @@
 
   .storycard-edit-btn {
     position: absolute;
-    bottom: -3.5%;
+    bottom: 1%;
     left: 50%;
     transform: translate(-50%, 0);
   }

@@ -2,12 +2,17 @@ import React, { useEffect, useState } from "react";
 import "./ShowStoryCard.css";
 import { Button } from "../../Components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark, faHeart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBookmark,
+  faDownload,
+  faHeart,
+} from "@fortawesome/free-solid-svg-icons";
 import { axiosGet, axiosPatch } from "../../services/axios.config";
 import { apiRoutes } from "../../services/apiRoutes";
 import Auth from "../../pages/auth/Auth";
 import { useDispatch, useSelector } from "react-redux";
 import { bookmarks, likes } from "../../feature/useSlice";
+import { toast } from "react-toastify";
 
 function ShowStoryCard({ storyId, cancelHandle, slide_id = "" }) {
   const isAuthenticated = useSelector((store) => store.user.isAuthenticated);
@@ -35,6 +40,8 @@ function ShowStoryCard({ storyId, cancelHandle, slide_id = "" }) {
   const [isLoginShow, setIsLoginShow] = useState(false);
 
   const [isShareClick, setIsShareClick] = useState(false);
+
+  const [isDownloaded, setIsDownloaded] = useState(false);
 
   const handleLike = (slideId) => {
     if (!isLiked) {
@@ -136,6 +143,28 @@ function ShowStoryCard({ storyId, cancelHandle, slide_id = "" }) {
       if (currentSlideLoader < slides.length)
         setCurrentSlideLoader(currentSlideLoader + 1);
     }, 15000);
+  };
+
+  const downloadFile = async (fileURL) => {
+    try {
+      const response = await fetch(fileURL);
+      const blob = await response.blob();
+
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+
+      reader.onloadend = () => {
+        const base64data = reader.result;
+
+        const link = document.createElement("a");
+        link.href = base64data;
+        link.download = `slide${currentSlide}`;
+        link.click();
+        setIsDownloaded(true);
+      };
+    } catch (error) {
+      toast.error("Failed to download file");
+    }
   };
 
   timeoutId = setTimeout(() => {
@@ -255,6 +284,28 @@ function ShowStoryCard({ storyId, cancelHandle, slide_id = "" }) {
                     />
                   </Button>
                 </div>
+
+                <div className="download-btn" style={{ color: "#fff" }}>
+                  <Button
+                    className={`showstorycard-lower-btns `}
+                    style={{ paddingLeft: "2rem" }}
+                    onClick={() => {
+                      if (isAuthenticated) {
+                        (async () =>
+                          await downloadFile(slides[currentSlide].url))();
+                      } else setIsLoginShow(true);
+                    }}
+                  >
+                    {isDownloaded ? (
+                      <img src="/assets/download_done.svg"/>
+                    ) : (
+                      <a>
+                        <FontAwesomeIcon icon={faDownload} size="2xl" />
+                      </a>
+                    )}
+                  </Button>
+                </div>
+
                 <div>
                   <Button
                     className={`showstorycard-lower-btns showstorycard-like-btn  `}
@@ -276,7 +327,7 @@ function ShowStoryCard({ storyId, cancelHandle, slide_id = "" }) {
             </div>
           </div>
 
-          <div className="show-story-arro-btns-mobile">
+          <div className="show-story-arro-btns-mobile right-arrow">
             <Button
               className="showstorycard-arraow-btns"
               onClick={() => {

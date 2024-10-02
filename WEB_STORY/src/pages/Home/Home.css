@@ -63,14 +63,18 @@
     padding: 0;
   }
   .home-webstory-stories-title {
-    visibility: hidden;
-    position: absolute;
+    font-size: 2.5rem;
+    line-height: 3.9rem;
+    text-align: center;
   }
   .home-webstory-category {
     padding: 2rem;
   }
   .home-webstory-stories-detail {
-    gap: 0;
+    gap: 1rem;
+    padding-bottom: 2rem;
+    padding-top: 0;
+    
   }
 
   .home-webstory-stories-owntories {

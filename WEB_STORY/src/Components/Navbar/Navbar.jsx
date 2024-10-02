@@ -86,7 +86,10 @@ function Navbar() {
             </div>
 
             <div className="nav-header-profile">
-              <img src={user.avatar} className="avatar" />
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-yi8lUjKNVqmWkbY2plqdttxFpzC2Efcq0g&s"
+                className="avatar"
+              />
             </div>
 
             <div className="nav-header-hamburg-btn">
@@ -189,7 +192,10 @@ function Navbar() {
                 }}
               >
                 <div className="nav-header-profile">
-                  <img src={user.avatar} className="avatar" />
+                  <img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-yi8lUjKNVqmWkbY2plqdttxFpzC2Efcq0g&s"
+                    className="avatar"
+                  />
                 </div>
                 <div className="nav-header-hamburg-username">
                   {user.username}
@@ -245,7 +251,6 @@ function Navbar() {
                   }}
                 />
               </div>
-              
             </div>
           </div>
         )}

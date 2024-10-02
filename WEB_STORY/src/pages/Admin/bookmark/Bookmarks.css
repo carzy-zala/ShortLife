@@ -5,6 +5,8 @@
   gap: 4rem;
 }
 
+
+
 .bookmark-heading {
   font-size: 3rem;
   line-height: 3.9rem;
@@ -15,4 +17,14 @@
  display: flex;
  gap: 4rem;
  flex-wrap: wrap;
+}
+
+@media screen and (min-width:300px) and (max-width:770px) {
+  .bookmark-webstory-main-div {
+    display: grid;
+    grid-template-rows: auto auto;
+    padding: 4rem 0 0 0;
+    gap: 4rem;
+  }
+  
 }
