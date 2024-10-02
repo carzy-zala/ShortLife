@@ -96,7 +96,7 @@ function Home() {
               </div>
 
               <div className="home-webstory-stories">
-                {story.slides.length ? (
+                {!story.slides.length ? (
                   <div className="no-story">
                     <span>No stories available</span>
                   </div>
