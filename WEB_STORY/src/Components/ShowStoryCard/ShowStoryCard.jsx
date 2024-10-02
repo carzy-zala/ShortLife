@@ -167,7 +167,7 @@ function ShowStoryCard({ storyId, cancelHandle, slide_id = "" }) {
                 }
               }}
             >
-              <img src="./src/assets/leftArrow.svg" />
+              <img src="/assets/leftArrow.svg" />
             </Button>
           </div>
 
@@ -204,13 +204,13 @@ function ShowStoryCard({ storyId, cancelHandle, slide_id = "" }) {
                     cancelHandle(false);
                   }}
                 >
-                  <img src="./src/assets/cancel.svg" />
+                  <img src="/assets/cancel.svg" />
                 </Button>
                 <Button
                   className="showstorycard-header-btn"
                   onClick={() => handleShare(currentSlide)}
                 >
-                  <img src="./src/assets/send.svg" />
+                  <img src="/assets/send.svg" />
                 </Button>
               </div>
             </div>
@@ -290,7 +290,7 @@ function ShowStoryCard({ storyId, cancelHandle, slide_id = "" }) {
                 }
               }}
             >
-              <img src="./src/assets/rightArrow.svg" />
+              <img src="/assets/rightArrow.svg" />
             </Button>
           </div>
         </div>
