@@ -72,7 +72,7 @@ function ShareStoryCard() {
                 }
               }}
             >
-              <img src="/src/assets/leftArrow.svg" />
+              <img src="/assets/leftArrow.svg" />
             </Button>
           </div>
 
@@ -119,7 +119,7 @@ function ShareStoryCard() {
                   className="sharestorycard-header-btn"
                   onClick={() => handleShare(1)}
                 >
-                  <img src="/src/assets/send.svg" alt="share" />
+                  <img src="/assets/send.svg" alt="share" />
                 </Button>
               </div>
             </div>
@@ -183,7 +183,7 @@ function ShareStoryCard() {
                 }
               }}
             >
-              <img src="/src/assets/rightArrow.svg" />
+              <img src="/assets/rightArrow.svg" />
             </Button>
           </div>
         </div>

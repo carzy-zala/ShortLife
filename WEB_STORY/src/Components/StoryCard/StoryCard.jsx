@@ -66,7 +66,7 @@ function StoryCard({
             <Button
               children={
                 <div className="storycard-edit-btn-inner-content">
-                  <img src="src/assets/edit.svg" /> Edit
+                  <img src="/assets/edit.svg" /> Edit
                 </div>
               }
               className="storycard-edit-btn"
