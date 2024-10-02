@@ -31,6 +31,8 @@ body {
   z-index: 1;
 }
 
+
+
 .webstory-no-content-error {
   font-size: 3rem;
   font-weight: 700;
@@ -38,4 +40,16 @@ body {
   text-align: center;
   color: #8E8E8E;
   margin: 0 auto;
+}
+
+@media screen and (min-width: 300px) and (max-width: 770px) {
+  .portal-div {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: block;
+  background-color: #fff;
+  height: 100%;
+  z-index: 1;
+}
 }

@@ -152,7 +152,7 @@ function ShowStoryCard({ storyId, cancelHandle, slide_id = "" }) {
     <div>
       {slides.length && !isLoginShow && (
         <div key={slides[currentSlide]._id} className="showstorycard-main-div">
-          <div>
+          <div className="show-story-arro-btns-mobile">
             <Button
               className="showstorycard-arraow-btns"
               onClick={() => {
@@ -276,7 +276,7 @@ function ShowStoryCard({ storyId, cancelHandle, slide_id = "" }) {
             </div>
           </div>
 
-          <div>
+          <div className="show-story-arro-btns-mobile">
             <Button
               className="showstorycard-arraow-btns"
               onClick={() => {

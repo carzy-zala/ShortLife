@@ -222,6 +222,7 @@ function Navbar() {
                   Bookmarks
                 </Button>
               </div>
+
               <div className="navbar-mobile-btn">
                 <Button
                   className="nav-header-btn"
@@ -244,6 +245,7 @@ function Navbar() {
                   }}
                 />
               </div>
+              
             </div>
           </div>
         )}

@@ -6,6 +6,13 @@
   display: flex;
   gap: 3.5rem;
   padding: 1rem;
+
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: auto;
+  overflow-x: scroll;
+  gap: 3.5rem;
+  padding: 1rem;
   
 }
 
@@ -28,4 +35,28 @@
     display: flex;
     flex-wrap: wrap;
     gap: 5rem;
+}
+
+@media screen and (min-width: 300px) and (max-width: 770px) {
+  .category-webstory-main-div {
+    padding: 0;
+  }
+  .category-webstory-stories-title {
+    visibility: hidden;
+    position: absolute;
+  }
+  .category-webstory-category {
+    padding: 2rem;
+  }
+  .category-webstory-stories-detail {
+    gap: 0;
+  }
+
+  .category-webstory-stories-owntories {
+    display: none;
+  }
+
+  .category-webstory-stories {
+    gap: 4rem;
+  }
 }

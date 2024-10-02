@@ -70,10 +70,7 @@ function Home() {
           </div>
 
           <div className="home-webstory-stories-more-div">
-          
-            {
-              
-              ownstories.length > 4 &&
+            {ownstories.length > 4 &&
               ownstories.length > (visibleReel["ownstories"] || 4) && (
                 <Button
                   key="ownstories"
