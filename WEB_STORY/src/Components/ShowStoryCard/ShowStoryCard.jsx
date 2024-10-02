@@ -41,7 +41,7 @@ function ShowStoryCard({ storyId, cancelHandle, slide_id = "" }) {
 
   const [isShareClick, setIsShareClick] = useState(false);
 
-  const [isDownloaded, setIsDownloaded] = useState(false);
+  const [isDownloaded, setIsDownloaded] = useState({});
 
   const handleLike = (slideId) => {
     if (!isLiked) {
@@ -160,7 +160,10 @@ function ShowStoryCard({ storyId, cancelHandle, slide_id = "" }) {
         link.href = base64data;
         link.download = `slide${currentSlide}`;
         link.click();
-        setIsDownloaded(true);
+        setIsDownloaded((prev) => ({
+          ...prev,
+          [currentSlide]: true,
+        }));
       };
     } catch (error) {
       toast.error("Failed to download file");
@@ -296,8 +299,8 @@ function ShowStoryCard({ storyId, cancelHandle, slide_id = "" }) {
                       } else setIsLoginShow(true);
                     }}
                   >
-                    {isDownloaded ? (
-                      <img src="/assets/download_done.svg"/>
+                    {isDownloaded[currentSlide] ? (
+                      <img src="/assets/download_done.svg" height="26px" width="26px"/>
                     ) : (
                       <a>
                         <FontAwesomeIcon icon={faDownload} size="2xl" />
