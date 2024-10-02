@@ -50,6 +50,45 @@ const addStory = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, {}, "Story created succesfully ."));
 });
 
+const updateStory = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+
+  const { category, slides, storyId } = req.body;
+
+  // category update
+  const categoryId = await Category.findOne({ text: category }).select("_id");
+
+  await Story.findByIdAndUpdate(
+    storyId,
+    { category: categoryId },
+    { new: true }
+  );
+
+  await Slide.deleteMany({ storyId: storyId });
+  // slide update
+
+  slides.map(async (slide) => {
+    const { heading, description, url } = slide;
+    const slideCreate = await Slide.create({
+      storyId,
+      heading,
+      description,
+      url,
+    });
+
+    if (!slideCreate) {
+      throw new ApiError(
+        500,
+        "ERROR :: Internal error while creating your slide !"
+      );
+    }
+  });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(201, {}, "Story updated succesfully ."));
+});
+
 const categoryStories = asyncHandler(async (req, res) => {
   const { category } = req.params;
 
@@ -60,15 +99,18 @@ const categoryStories = asyncHandler(async (req, res) => {
   }
 
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 12;
 
-  const skip = (page - 1) * limit;
+  
+
+  const skip = (page - 1) * 12;
+
+  
 
   const storiesId = await Story.find({ category: categoryId })
     .select("_id")
     .sort({ _id: 1 })
     .skip(skip)
-    .limit(limit);
+    .limit(12);
 
   if (storiesId.length) {
     const storiesSlide = storiesId.map(async (storyId) => {
@@ -81,7 +123,9 @@ const categoryStories = asyncHandler(async (req, res) => {
 
     res
       .status(200)
-      .json(new ApiResponse(200, { stories }, `Stories of ${category}`));
+      .json(
+        new ApiResponse(200, { category, stories }, `Stories of ${category}`)
+      );
   } else {
     throw new ApiError(500, "ERROR :: Interanal server error !");
   }
@@ -125,7 +169,6 @@ const story = asyncHandler(async (req, res) => {
 
   const category = await Category.findById(story.category);
 
-
   res
     .status(200)
     .json(
@@ -137,4 +180,4 @@ const story = asyncHandler(async (req, res) => {
     );
 });
 
-export { addStory, categoryStories, allStories, story };
+export { addStory, categoryStories, allStories, story, updateStory };

@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./StoryCard.css";
+import "./StoryMobileCard.css";
 import { Button, ShowStoryCard } from "../../Components";
 import { createPortal } from "react-dom";
 import AddStory from "../../pages/Admin/AddStory/AddStory";
+import { useDispatch } from "react-redux";
+import { fetchOwnStories } from "../../feature/useSlice";
+import axios from "axios";
+import setToken from "../../utils/setToken";
 
 function StoryCard({
   url,
@@ -12,12 +17,28 @@ function StoryCard({
   isVideo = false,
   isImage = false,
   isLogin = false,
+  slide_id = "",
 }) {
   const [storyClick, setIsStoryClick] = useState(false);
   const [isEditClick, setIsEditClick] = useState(false);
 
+  const dispatch = useDispatch();
+
+  function fetchStories() {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      setToken(accessToken);
+      axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+      dispatch(fetchOwnStories());
+    }
+  }
+
+  useEffect(() => {
+    fetchStories();
+  }, [isEditClick]);
+
   return (
-    <div>
+    <div className="storycard-margin">
       <div className="storycard-main-div">
         <Button
           className="storycard-main-btn"
@@ -59,7 +80,11 @@ function StoryCard({
       {storyClick &&
         createPortal(
           <div className="portal-div">
-            <ShowStoryCard storyId={storyId} cancelHandle={setIsStoryClick} />
+            <ShowStoryCard
+              storyId={storyId}
+              cancelHandle={setIsStoryClick}
+              slide_id={slide_id}
+            />
           </div>,
           document.body
         )}
@@ -67,7 +92,11 @@ function StoryCard({
       {isEditClick &&
         createPortal(
           <div className="portal-div">
-            <AddStory cancelHandle={setIsEditClick} isEdit={true} storyId={storyId}/>
+            <AddStory
+              cancelHandle={setIsEditClick}
+              isEdit={true}
+              storyId={storyId}
+            />
           </div>,
           document.body
         )}

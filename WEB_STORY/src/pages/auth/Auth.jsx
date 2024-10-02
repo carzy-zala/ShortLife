@@ -38,7 +38,6 @@ function Auth({ title, cancelHandel }) {
     let response = "";
     setIsUsernameVerified(false);
 
-    console.log("Auth", username);
 
     response = await axiosGet(usernameVerificationUrl, { username });
 
@@ -57,7 +56,7 @@ function Auth({ title, cancelHandel }) {
     const response = await axiosPost(loginUrl, { username, password });
 
     if (response.success) {
-      const { username, avatar } = response.data.user;
+      const { user } = response.data;
 
       const { accessToken, refreshToken } = response.data;
 
@@ -65,7 +64,7 @@ function Auth({ title, cancelHandel }) {
 
       setToken(accessToken, refreshToken);
 
-      dispatch(login({ user: { username, avatar } }));
+      dispatch(login({ user: user }));
       dispatch(fetchOwnStories());
 
       cancelHandel(false);
@@ -139,7 +138,6 @@ function Auth({ title, cancelHandel }) {
     ) {
       (async () => {
         const username = watch("username");
-        console.log(username);
         await usernameVarificaion(username);
       })();
     }

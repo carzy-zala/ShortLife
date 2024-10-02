@@ -9,6 +9,8 @@ import {
   register,
   ownStories,
   likes,
+  removeBookmark,
+  bookmarks,
 } from "../controller/user.controller.js";
 
 const userRoutes = Router();
@@ -18,7 +20,9 @@ userRoutes.route("/usernameVerification/:username").get(isUsernameExist);
 userRoutes.route("/login").post(login);
 
 userRoutes.route("/bookmark").get(verifyJWT, bookmark);
-userRoutes.route("/addBookmark").patch(verifyJWT, addBookmark);
+userRoutes.route("/bookmarkArray").get(verifyJWT, bookmarks);
+userRoutes.route("/addBookmark/:slideId").patch(verifyJWT, addBookmark);
+userRoutes.route("/removeBookmark/:slideId").patch(verifyJWT, removeBookmark);
 
 userRoutes.route("/stories").get(verifyJWT, ownStories);
 userRoutes.route("/likes").get(verifyJWT, likes);

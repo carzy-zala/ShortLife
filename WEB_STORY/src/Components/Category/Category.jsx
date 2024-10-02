@@ -9,7 +9,6 @@ import { apiRoutes } from "../../services/apiRoutes";
 import Loader from "../Loader/Loader";
 
 function Category({}) {
-  const categories = useSelector((store) => store.categories.categories) || [];
 
   const [stories, setStories] = useState([]);
   const { category, index } = useParams();

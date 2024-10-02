@@ -5,7 +5,10 @@ const apiRoutes = {
   LOGIN_USER: "/user/login",
   LOGOUT_USER: "/user/logout",
   BOOKMARK: "/user/bookmark",
-  ADD_BOOKMARK : "/user/addBookmark",
+  BOOKMARK_ARRAY: "/user/bookmarkArray",
+  ADD_BOOKMARK : "/user/addBookmark/:slideId",
+  REMOVE_BOOKMARK : "/user/removeBookmark/:slideId",
+  REMOVE_BOOKMARK : "/user/removeBookmark/:slideId",
   OWN_STORIES : "/user/stories",
   LIKES : "/user/likes",
 
@@ -16,6 +19,7 @@ const apiRoutes = {
   // story
 
   ADD_STORY: "/story/addStory",
+  EDIT_STORY: "/story/updateStory",
   CATEGORY_STORIES : "/story/category/:category",
   ALL_STORY : "/story/stories",
   STORY : "/story/:storyId",

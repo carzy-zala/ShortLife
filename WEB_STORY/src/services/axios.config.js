@@ -117,7 +117,7 @@ export const axiosPatch = async (
       params,
     });
     response = { ...generateResponse(result.data) };
-  } catch (e) {
+  } catch (error) {
     response = { ...generateError(error) };
   }
   return response;

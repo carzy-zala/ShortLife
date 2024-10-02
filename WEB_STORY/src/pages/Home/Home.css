@@ -39,6 +39,7 @@
 .home-webstory-stories {
   display: flex;
   gap: 5rem;
+  flex-wrap: wrap;
 }
 
 .home-webstory-stories-more-div {
@@ -55,4 +56,28 @@
   text-align: center;
   color: #fff;
   background: #ff7373;
+}
+
+@media screen and (min-width: 300px) and (max-width: 770px) {
+  .home-main-div {
+    padding: 0;
+  }
+  .home-webstory-stories-title {
+    visibility: hidden;
+    position: absolute;
+  }
+  .home-webstory-category {
+    padding: 2rem;
+  }
+  .home-webstory-stories-detail {
+    gap: 0;
+  }
+
+  .home-webstory-stories-owntories {
+    display: none;
+  }
+
+  .home-webstory-stories {
+    gap: 4rem;
+  }
 }

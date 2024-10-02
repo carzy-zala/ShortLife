@@ -1,0 +1,37 @@
+@media screen and (min-width: 300px) and (max-width: 770px) {
+    .filtercard-main-div {
+        height: 14.3rem;
+        position: relative;
+        border-radius: 1.5rem;
+        
+      }
+      
+      .filtercard-img {
+        border-radius: 1.5rem;
+        height: 14.3rem;
+      }
+      
+      .filtercard-btn-div {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 14.3rem;
+        border-radius: 1.5rem;
+        background-color: #00000099;
+      }
+      
+      .filtercard-btn {
+        border: none;
+        outline: none;
+        background: transparent;
+        height: 14.3rem;
+        height: 10.6rem;
+        font-size: 3rem;
+        line-height: 3.906rem;
+        text-align: center;
+        color: #fff;
+      }
+      
+      
+}

@@ -112,7 +112,7 @@ const login = asyncHandler(async (req, res) => {
   );
 
   const loggedInUser = await User.findById(user._id).select(
-    "-password -refreshToken -bookmark"
+    "-password -refreshToken "
   );
 
   const options = {
@@ -139,7 +139,7 @@ const login = asyncHandler(async (req, res) => {
 
 //#endregion
 
-//#region bookmark
+//#region bookmark with slide
 const bookmark = asyncHandler(async (req, res) => {
   const { _id } = req.user;
 
@@ -160,10 +160,29 @@ const bookmark = asyncHandler(async (req, res) => {
 
 //#endregion
 
+//#region bookmarks
+
+const bookmarks = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const bookmark = await User.findById(_id).select("bookmark");
+
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { bookmark: bookmark.bookmark },
+        "Bookmark array fetched succesfully !"
+      )
+    );
+});
+
+//#endregion
+
 //#region  addBookmark
 const addBookmark = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const { slideId } = req.body;
+  const { slideId } = req.params;
 
   await User.findByIdAndUpdate(
     _id,
@@ -176,6 +195,26 @@ const addBookmark = asyncHandler(async (req, res) => {
   res
     .status(200)
     .json(new ApiResponse(200, {}, "Added to bookmark succesfully !"));
+});
+
+//#endregion
+
+//#region  addBookmark
+const removeBookmark = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const { slideId } = req.params;
+
+  await User.findByIdAndUpdate(
+    _id,
+    {
+      $pull: { bookmark: { $in: [slideId] } },
+    },
+    { new: true, useFindAndModify: false }
+  );
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Remove from bookmark succesfully !"));
 });
 
 //#endregion
@@ -211,11 +250,23 @@ const ownStories = asyncHandler(async (req, res) => {
 const likes = asyncHandler(async (req, res) => {
   const { _id } = req.user;
 
-  const like = await User.findById(_id).select("like")
+  const like = await User.findById(_id).select("like");
 
-
-
-  res.status(200).json(new ApiResponse(200,{like:like.like},"Likes fetched successfully !"))
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, { like: like.like }, "Likes fetched successfully !")
+    );
 });
 
-export { isUsernameExist, register, login, bookmark, addBookmark, ownStories ,likes};
+export {
+  isUsernameExist,
+  register,
+  login,
+  bookmark,
+  bookmarks,
+  addBookmark,
+  removeBookmark,
+  ownStories,
+  likes,
+};

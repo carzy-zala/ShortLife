@@ -43,7 +43,7 @@ function Bookmarks() {
       <div className="bookmark-heading">Your Bookmarks</div>
 
       <div className="bookmark-webstory-stories">
-        {bookmarks.length > 0 &&
+        {bookmarks.length > 0 ? (
           bookmarks.map((bookmark) => {
             return (
               <StoryCard
@@ -52,9 +52,14 @@ function Bookmarks() {
                 description={bookmark.description}
                 key={bookmark._id}
                 isImage={true}
+                storyId={bookmark.storyId}
+                slide_id={bookmark._id}
               />
             );
-          })}
+          })
+        ) : (
+          <div className="webstory-no-content-error">No bookmark is added</div>
+        )}
       </div>
     </div>
   );

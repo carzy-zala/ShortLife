@@ -10,6 +10,7 @@ const initialState = {
   avatar: "",
   ownstories: [],
   like: [],
+  bookmark: [],
 };
 
 export const fetchOwnStories = createAsyncThunk("user/fetchOwnStories", () => {
@@ -19,9 +20,15 @@ export const fetchOwnStories = createAsyncThunk("user/fetchOwnStories", () => {
 });
 
 export const likes = createAsyncThunk("user/likes", () => {
-  return axiosGet(`${import.meta.env.VITE_HOST_API_URL}${apiRoutes.LIKES}`).then(
-    (response) => response.data.like
-  );
+  return axiosGet(
+    `${import.meta.env.VITE_HOST_API_URL}${apiRoutes.LIKES}`
+  ).then((response) => response.data.like);
+});
+
+export const bookmarks = createAsyncThunk("user/bookmarks", () => {
+  return axiosGet(
+    `${import.meta.env.VITE_HOST_API_URL}${apiRoutes.BOOKMARK_ARRAY}`
+  ).then((response) => response.data.bookmark);
 });
 
 const userReducer = createSlice({
@@ -38,10 +45,12 @@ const userReducer = createSlice({
     },
     login: (state, action) => {
       state.isAuthenticated = true;
-      const { username, avatar, like } = action.payload.user;
+      const { username, avatar, like, bookmark } = action.payload.user;
       state.username = username;
       state.avatar = avatar || "";
       state.like = like || [];
+      state.bookmark = bookmark || [];
+      
     },
     reset: (state) => {
       state = { ...initialState };
@@ -51,8 +60,11 @@ const userReducer = createSlice({
     builder.addCase(fetchOwnStories.fulfilled, (state, action) => {
       state.ownstories = action.payload;
     });
-    builder.addCase(likes.fulfilled, (state, action) => {            
+    builder.addCase(likes.fulfilled, (state, action) => {
       state.like = action.payload;
+    });
+    builder.addCase(bookmarks.fulfilled, (state, action) => {      
+      state.bookmark = action.payload;
     });
   },
 });

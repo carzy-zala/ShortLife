@@ -7,12 +7,13 @@ import { axiosGet, axiosPatch } from "../../services/axios.config";
 import { apiRoutes } from "../../services/apiRoutes";
 import Auth from "../../pages/auth/Auth";
 import { useDispatch, useSelector } from "react-redux";
-import { likes } from "../../feature/useSlice";
+import { bookmarks, likes } from "../../feature/useSlice";
 
-function ShowStoryCard({ storyId, cancelHandle }) {
+function ShowStoryCard({ storyId, cancelHandle, slide_id = "" }) {
   const isAuthenticated = useSelector((store) => store.user.isAuthenticated);
 
   const like = useSelector((store) => store.user.like);
+  const bookmark = useSelector((store) => store.user.bookmark);
   const dispatch = useDispatch();
 
   const [slides, setSlides] = useState([]);
@@ -23,7 +24,13 @@ function ShowStoryCard({ storyId, cancelHandle }) {
       !!like.length &&
       !!like.includes(slides[currentSlide]._id)
   );
-  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  const [isBookmarked, setIsBookmarked] = useState(
+    !!slides.length &&
+      !!bookmark &&
+      !!bookmark.includes(slides[currentSlide]._id)
+  );
+
   const [currentSlideLoader, setCurrentSlideLoader] = useState(0);
   const [isLoginShow, setIsLoginShow] = useState(false);
 
@@ -52,6 +59,28 @@ function ShowStoryCard({ storyId, cancelHandle }) {
     }
   };
 
+  const handleBookmark = (slideId) => {
+    if (!isBookmarked) {
+      (async () =>
+        await axiosPatch(
+          `${import.meta.env.VITE_HOST_API_URL}${
+            apiRoutes.ADD_BOOKMARK
+          }`.replace(":slideId", slideId)
+        ).then((response) => {
+          setIsBookmarked(true);
+        }))();
+    } else {
+      (async () =>
+        await axiosPatch(
+          `${import.meta.env.VITE_HOST_API_URL}${
+            apiRoutes.REMOVE_BOOKMARK
+          }`.replace(":slideId", slideId)
+        ).then((response) => {
+          setIsBookmarked(false);
+        }))();
+    }
+  };
+
   useEffect(() => {
     (async () =>
       await axiosGet(
@@ -61,7 +90,21 @@ function ShowStoryCard({ storyId, cancelHandle }) {
         )
       ).then((response) => {
         setSlides(response.data.slides);
+        if (!slides.length) {
+          setIsLiked(!!like.includes(response.data.slides[0]._id));
+          setIsBookmarked(!!bookmark.includes(response.data.slides[0]._id));
+        }
         dispatch(likes());
+        dispatch(bookmarks());
+
+        if (slide_id) {
+          response.data.slides.map((slide, index) => {
+            if (slide._id === slide_id) {
+              setCurrentSlide(index);
+              setCurrentSlideLoader(index);
+            }
+          });
+        }
       }))();
   }, [setIsLiked, isLiked]);
 
@@ -77,10 +120,29 @@ function ShowStoryCard({ storyId, cancelHandle }) {
     window.navigator.clipboard.writeText(storyUrl);
   };
 
-  setTimeout(() => {
+  let timeoutId;
+
+  const resetTimeout = (id) => {
+    if (id) {
+      clearTimeout(timeoutId);
+    }
+
+    timeoutId = setTimeout(() => {
+      if (currentSlide < slides.length - 1) {
+        setCurrentSlide(currentSlide + 1);
+        setIsLiked(!!like.includes(slides[currentSlide + 1]._id));
+        setIsBookmarked(!!bookmark.includes(slides[currentSlide + 1]._id));
+      }
+      if (currentSlideLoader < slides.length)
+        setCurrentSlideLoader(currentSlideLoader + 1);
+    }, 15000);
+  };
+
+  timeoutId = setTimeout(() => {
     if (currentSlide < slides.length - 1) {
       setCurrentSlide(currentSlide + 1);
-      setIsLiked(!!like.includes(slides[currentSlide+1]._id));
+      setIsLiked(!!like.includes(slides[currentSlide + 1]._id));
+      setIsBookmarked(!!bookmark.includes(slides[currentSlide + 1]._id));
     }
     if (currentSlideLoader < slides.length)
       setCurrentSlideLoader(currentSlideLoader + 1);
@@ -97,7 +159,11 @@ function ShowStoryCard({ storyId, cancelHandle }) {
                 if (currentSlide) {
                   setCurrentSlide(currentSlide - 1);
                   setCurrentSlideLoader(currentSlide - 1);
-                  setIsLiked(!!like.includes(slides[currentSlide-1]._id))
+                  setIsLiked(!!like.includes(slides[currentSlide - 1]._id));
+                  setIsBookmarked(
+                    !!bookmark.includes(slides[currentSlide - 1]._id)
+                  );
+                  resetTimeout(timeoutId);
                 }
               }}
             >
@@ -171,11 +237,16 @@ function ShowStoryCard({ storyId, cancelHandle }) {
                 className="showstorycard-lower-btn-div"
                 style={{ gridRow: "3" }}
               >
-                <div>
+                <div style={{ color: "#fff" }}>
                   <Button
                     className={`showstorycard-lower-btns `}
                     style={{ paddingLeft: "2rem" }}
-                    onClick={() => setIsBookmarked(!isBookmarked)}
+                    onClick={() => {
+                      if (isAuthenticated) {
+                        handleBookmark(slides[currentSlide]._id);
+                      } else setIsLoginShow(true);
+                      setIsBookmarked(!isBookmarked);
+                    }}
                   >
                     <FontAwesomeIcon
                       icon={faBookmark}
@@ -212,7 +283,10 @@ function ShowStoryCard({ storyId, cancelHandle }) {
                 if (currentSlide < slides.length - 1) {
                   setCurrentSlide(currentSlide + 1);
                   setCurrentSlideLoader(currentSlide + 1);
-                  setIsLiked(!!like.includes(slides[currentSlide+1]._id))
+                  setIsLiked(!!like.includes(slides[currentSlide + 1]._id));
+                  setIsBookmarked(
+                    !!bookmark.includes(slides[currentSlide + 1]._id)
+                  );
                 }
               }}
             >

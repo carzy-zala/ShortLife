@@ -81,6 +81,10 @@
   gap: 0.5rem;
 }
 
+.storycard-margin{
+  margin: 0;
+}
+
 @media screen and (min-width: 1024px) and (max-width: 1100px) {
   .storycard-image {
     width: 20rem;

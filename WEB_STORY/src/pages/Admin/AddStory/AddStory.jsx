@@ -3,7 +3,11 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { Button, Input } from "../../../Components";
 import "./AddStory.css";
 import { toast } from "react-toastify";
-import { axiosGet } from "../../../services/axios.config";
+import {
+  axiosGet,
+  axiosPatch,
+  axiosPost,
+} from "../../../services/axios.config";
 import { apiRoutes } from "../../../services/apiRoutes";
 import { useSelector } from "react-redux";
 
@@ -160,11 +164,30 @@ function AddStory({ cancelHandle, isEdit = false, storyId = "" }) {
         }
       })
       .catch((error) => {
-        toast.error("Please enter valid link");
+        toast.error("Please enter public link");
         flag = false;
       });
 
     return flag;
+  };
+
+  const handleEditStory = (data) => {
+    (async () => {
+      const storyURL = `${import.meta.env.VITE_HOST_API_URL}${
+        apiRoutes.EDIT_STORY
+      }`;
+
+      await axiosPatch(storyURL, {
+        category: data.category,
+        slides: data.slides,
+        storyId,
+      }).then((response) => {
+        if (response.success) {
+          toast.success(response.message);
+          cancelHandle(false);
+        }
+      });
+    })();
   };
 
   const handlePostStory = (data) => {
@@ -175,9 +198,22 @@ function AddStory({ cancelHandle, isEdit = false, storyId = "" }) {
 
       if (isSlideDataValid(data)) {
         if (isEdit) {
-          console.log(data);
+          handleEditStory(data);
         } else {
-          console.log(data);
+          (async () => {
+            const storyURL = `${import.meta.env.VITE_HOST_API_URL}${
+              apiRoutes.ADD_STORY
+            }`;
+            await axiosPost(storyURL, {
+              category: data.category,
+              slides: data.slides,
+            }).then((response) => {
+              if (response.success) {
+                toast.success(response.message);
+                cancelHandle(false);
+              }
+            });
+          })();
         }
       }
       setIsLoading(false);
