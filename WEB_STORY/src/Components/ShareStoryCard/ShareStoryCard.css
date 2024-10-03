@@ -127,10 +127,9 @@
   
   .sharestorycard-lower-btn-div {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto auto auto;
     padding-top: 1.5rem;
-    justify-content: space-around;
-    gap: 13rem;
+    gap: 1rem;
   }
   
   .sharestorycard-lower-btns {

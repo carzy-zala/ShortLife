@@ -15,7 +15,7 @@ function FilterCard({ categoryText = "All" }) {
     category === "All" ? navigate(`/`) : navigate(`/${category}`);
   };
 
-  return categories.map((category, index) => (
+  return categories.length > 1 && categories.map((category, index) => (
     <div key={`${category._id}.${category}`} className="filtercard-main-div">
       <img
         src={category.imageUrl}

@@ -3,12 +3,7 @@ import { axiosGet } from "../services/axios.config";
 import { apiRoutes } from "../services/apiRoutes";
 
 const initialState = {
-  stories: [
-    {
-      slides: [],
-      category: "",
-    },
-  ],
+  stories: [],
 };
 
 export const fetchStories = createAsyncThunk("story/fetchStories", () => {

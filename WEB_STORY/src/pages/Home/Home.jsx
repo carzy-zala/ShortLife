@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Home.css";
-import { Button, FilterCard, StoryCard } from "../../Components";
+import { Button, FilterCard, Loader, StoryCard } from "../../Components";
 import { useDispatch, useSelector } from "react-redux";
 import setToken from "../../utils/setToken";
 import { addStoriesToCategory } from "../../feature/storySlice";
@@ -83,7 +83,7 @@ function Home() {
         </div>
       )}
 
-      {stories.length &&
+      {stories.length ? (
         stories.map((story, index) => {
           const visible = visibleReel[story.category] || 4;
           return (
@@ -116,7 +116,6 @@ function Home() {
                   })
                 )}
               </div>
-
               <div
                 className="home-webstory-stories-more-div"
                 key={story.category}
@@ -131,7 +130,14 @@ function Home() {
               </div>
             </div>
           );
-        })}
+        })
+      ) : (
+        <div className="portal-div" >
+          <div style={{backgroundColor:"white",padding:"2rem",borderRadius:"1rem"}}>
+            <Loader backgroundColor="blue"/>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
