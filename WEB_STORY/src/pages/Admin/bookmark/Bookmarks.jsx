@@ -46,7 +46,7 @@ function Bookmarks() {
         {bookmarks.length > 0 ? (
           bookmarks.map((bookmark) => {
             return (
-              <StoryCard
+              bookmark && <StoryCard
                 url={bookmark.url}
                 heading={bookmark.heading}
                 description={bookmark.description}
