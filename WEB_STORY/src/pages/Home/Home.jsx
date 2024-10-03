@@ -91,10 +91,12 @@ function Home() {
               className="home-webstory-stories-detail  "
               key={`${story._id}.${story.category}`}
             >
-              <div className="home-webstory-stories-title">
-                Top Stories About {`${story.category}`}
-              </div>
-
+              {story.category && (
+                <div className="home-webstory-stories-title">
+                  Top Stories About {`${story.category}`}
+                </div>
+              )}
+              
               <div className="home-webstory-stories">
                 {!story.slides.length ? (
                   <div className="no-story">
@@ -132,9 +134,20 @@ function Home() {
           );
         })
       ) : (
-        <div className="portal-div" >
-          <div style={{backgroundColor:"white",padding:"2rem",borderRadius:"1rem"}}>
-            <Loader backgroundColor="blue"/>
+        <div className="portal-div">
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "2rem",
+              borderRadius: "1rem",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <Loader backgroundColor="blue" />
+            <div>Please wait ! </div>
           </div>
         </div>
       )}
