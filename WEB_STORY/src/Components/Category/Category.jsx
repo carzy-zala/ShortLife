@@ -9,7 +9,6 @@ import { apiRoutes } from "../../services/apiRoutes";
 import Loader from "../Loader/Loader";
 
 function Category({}) {
-
   const [stories, setStories] = useState([]);
   const { category, index } = useParams();
 
@@ -26,18 +25,18 @@ function Category({}) {
   }, [category]);
 
   return (
-    stories.length && (
-      <div className="category-webstory-main-div">
-        <div className="category-webstory-category">
-          <FilterCard currentFilterIndex={index} categoryText={category} />
-        </div>
+    <div className="category-webstory-main-div">
+      <div className="category-webstory-category">
+        <FilterCard currentFilterIndex={index} categoryText={category} />
+      </div>
 
-        <div>
-          <div className="category-webstory-stories-detail">
-            <div className="category-webstory-stories-title">
-              Top Stories About {`${category}`}
-            </div>
+      <div>
+        <div className="category-webstory-stories-detail">
+          <div className="category-webstory-stories-title">
+            Top Stories About {`${category}`}
+          </div>
 
+          {stories.length ? (
             <div className="category-webstory-stories">
               {stories.map((story, index) => {
                 return (
@@ -53,10 +52,14 @@ function Category({}) {
                 );
               })}
             </div>
-          </div>
+          ) : (
+            <div className="no-story" style={{height:"3rem"}}>
+              <span>Oops !! No stories available !</span>
+            </div>
+          )}
         </div>
       </div>
-    )
+    </div>
   );
 }
 

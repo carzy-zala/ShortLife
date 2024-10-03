@@ -67,13 +67,9 @@ const updateStory = asyncHandler(async (req, res) => {
   // slide update
 
   slides.map(async (slide) => {
-    const { heading, description, url,  _id } = slide;
-
+    const { heading, description, url, _id } = slide;
 
     if (_id) {
-      
-      console.log("old");
-      
 
       await Slide.findByIdAndUpdate(
         _id,
@@ -85,17 +81,14 @@ const updateStory = asyncHandler(async (req, res) => {
         { new: true }
       );
     } else {
-      console.log("new");
-      
-       const slideCreate = await Slide.create({
+
+      const slideCreate = await Slide.create({
         storyId,
         heading,
         description,
         url,
       });
     }
-
-    
   });
 
   return res
@@ -108,6 +101,7 @@ const categoryStories = asyncHandler(async (req, res) => {
 
   const categoryId = await Category.findOne({ text: category }).select("_id");
 
+
   if (!categoryId) {
     throw new ApiError(400, "ERROR :: Can't get your category !");
   }
@@ -118,7 +112,7 @@ const categoryStories = asyncHandler(async (req, res) => {
 
   const storiesId = await Story.find({ category: categoryId })
     .select("_id")
-    .sort({ _id: 1 })
+    .sort({ _id: -1 })
     .skip(skip)
     .limit(12);
 
@@ -137,7 +131,15 @@ const categoryStories = asyncHandler(async (req, res) => {
         new ApiResponse(200, { category, stories }, `Stories of ${category}`)
       );
   } else {
-    throw new ApiError(500, "ERROR :: Interanal server error !");
+    res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { category, stories: [] },
+          `Stories of ${category}`
+        )
+      );
   }
 });
 
